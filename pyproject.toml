@@ -1,0 +1,40 @@
+[build-system]
+requires = ["hatchling>=1.24"]
+build-backend = "hatchling.build"
+
+[project]
+name = "claude-code-best-practices"
+version = "0.1.0"
+description = "Claude Code Best Practices für Teams: Prüf-CLI, getestete Hooks gegen Secrets und deutsche personenbezogene Daten, Vorlagen für CLAUDE.md und settings.json."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+requires-python = ">=3.10"
+authors = [{ name = "Pexon Consulting GmbH" }]
+keywords = ["claude-code", "claude", "hooks", "dsgvo", "gdpr", "pii", "settings.json", "claude.md", "agentic-coding", "anthropic"]
+classifiers = [
+  "Programming Language :: Python :: 3",
+  "Environment :: Console",
+  "Intended Audience :: Developers",
+  "Natural Language :: German",
+  "Topic :: Security",
+  "Topic :: Software Development :: Quality Assurance",
+]
+dependencies = []
+
+[project.optional-dependencies]
+dev = ["pytest>=8"]
+
+[project.urls]
+Homepage = "https://github.com/pexon-consulting/claude-code-best-practices"
+Documentation = "https://github.com/pexon-consulting/claude-code-best-practices/tree/main/docs"
+Changelog = "https://github.com/pexon-consulting/claude-code-best-practices/blob/main/CHANGELOG.md"
+
+[project.scripts]
+claude-team = "claude_team.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/claude_team"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

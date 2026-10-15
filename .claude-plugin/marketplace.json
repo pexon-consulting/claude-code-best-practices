@@ -1,0 +1,16 @@
+{
+  "name": "claude-code-best-practices",
+  "description": "Claude Code Best Practices für Teams: das Plugin team-basis mit Hooks gegen Secrets und deutsche personenbezogene Daten, Subagents und Skills.",
+  "owner": {
+    "name": "Pexon Consulting GmbH",
+    "url": "https://github.com/pexon-consulting"
+  },
+  "plugins": [
+    {
+      "name": "team-basis",
+      "source": "./",
+      "category": "security",
+      "tags": ["hooks", "dsgvo", "pii", "secrets", "team"]
+    }
+  ]
+}

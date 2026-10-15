@@ -1,0 +1,15 @@
+__pycache__/
+*.pyc
+.venv/
+dist/
+build/
+*.egg-info/
+.pytest_cache/
+
+# Claude Code
+CLAUDE.local.md
+.claude/settings.local.json
+.claude/protokoll/
+.env
+.env.*
+!.env.example

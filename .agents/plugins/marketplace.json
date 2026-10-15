@@ -1,0 +1,20 @@
+{
+  "name": "pexon-consulting",
+  "interface": {
+    "displayName": "Claude Code Best Practices"
+  },
+  "plugins": [
+    {
+      "name": "team-basis",
+      "source": {
+        "source": "local",
+        "path": "./"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Developer Tools"
+    }
+  ]
+}

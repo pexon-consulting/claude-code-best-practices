@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "Wenn du Claude Code Best Practices für Teams nutzt oder zitierst, nenne bitte dieses Repository."
+title: "Claude Code Best Practices für Teams"
+abstract: "Deutschsprachige Vorlagen, Anleitungen und eine Prüf-CLI für Teams, die Claude Code einsetzen: CLAUDE.md, settings.json, Permissions, getestete Hooks gegen Secrets und deutsche personenbezogene Daten, MCP, Subagents, Skills, DSGVO und Team-Rollout."
+type: software
+authors:
+  - name: "Pexon Consulting GmbH"
+  - family-names: "Pham"
+    given-names: "Phillip"
+repository-code: "https://github.com/pexon-consulting/claude-code-best-practices"
+license: MIT
+version: 0.1.0
+date-released: 2026-10-15
+keywords:
+  - claude-code
+  - claude-md
+  - hooks
+  - dsgvo
+  - agentic-coding

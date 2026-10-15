@@ -1,0 +1,22 @@
+{
+  "secrets": {
+    "modus": "deny",
+    "pfade_ausnehmen": []
+  },
+  "pii": {
+    "modus": "deny",
+    "kontakte_ab": 5,
+    "pfade_ausnehmen": ["tests/fixtures/**"]
+  },
+  "befehle": {
+    "modus": "deny",
+    "fragen_bei": ["git push", "npm publish", "terraform apply", "kubectl delete", "helm upgrade"]
+  },
+  "protokoll": {
+    "aktiv": true,
+    "ordner": ".claude/protokoll"
+  },
+  "stopp": {
+    "befehl": ""
+  }
+}

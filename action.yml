@@ -1,0 +1,66 @@
+name: Claude Code Audit
+description: Prüft CLAUDE.md, settings.json, Hooks, MCP und Git auf 35 Regeln. Optional als SARIF für GitHub Code Scanning.
+author: Pexon Consulting GmbH
+branding:
+  icon: shield
+  color: orange
+
+inputs:
+  pfad:
+    description: Ordner, der geprüft wird
+    default: "."
+  schwelle:
+    description: Ab welcher Stufe der Job fehlschlägt (fehler, warnung, hinweis)
+    default: fehler
+  ignorieren:
+    description: Regel-IDs, kommagetrennt, z.B. CC019,CC020
+    default: ""
+  sarif:
+    description: Befunde als SARIF an GitHub Code Scanning melden (braucht permissions security-events write)
+    default: "false"
+
+outputs:
+  exit-code:
+    description: 0 ohne Befund über der Schwelle, sonst 1
+    value: ${{ steps.audit.outputs.exit-code }}
+
+runs:
+  using: composite
+  steps:
+    - name: claude-team installieren
+      shell: bash
+      run: |
+        python3 -m venv "$RUNNER_TEMP/claude-team"
+        "$RUNNER_TEMP/claude-team/bin/pip" install --quiet --disable-pip-version-check "${{ github.action_path }}"
+        echo "$RUNNER_TEMP/claude-team/bin" >> "$GITHUB_PATH"
+
+    - name: Audit
+      id: audit
+      shell: bash
+      env:
+        PFAD: ${{ inputs.pfad }}
+        SCHWELLE: ${{ inputs.schwelle }}
+        IGNORIEREN: ${{ inputs.ignorieren }}
+        SARIF: ${{ inputs.sarif }}
+      run: |
+        argumente=(--schwelle "$SCHWELLE")
+        if [ -n "$IGNORIEREN" ]; then argumente+=(--ignorieren "$IGNORIEREN"); fi
+        claude-team audit "$PFAD" "${argumente[@]}" --format markdown >> "$GITHUB_STEP_SUMMARY" || true
+        if [ "$SARIF" = "true" ]; then
+          claude-team audit "$PFAD" "${argumente[@]}" --format sarif --out claude-team.sarif || true
+        fi
+        set +e
+        claude-team audit "$PFAD" "${argumente[@]}"
+        code=$?
+        echo "exit-code=$code" >> "$GITHUB_OUTPUT"
+
+    - name: SARIF hochladen
+      if: inputs.sarif == 'true'
+      uses: github/codeql-action/upload-sarif@v3
+      with:
+        sarif_file: claude-team.sarif
+        category: claude-team
+
+    - name: Ergebnis
+      shell: bash
+      run: exit "${{ steps.audit.outputs.exit-code }}"
