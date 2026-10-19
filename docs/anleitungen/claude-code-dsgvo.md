@@ -1,8 +1,8 @@
 # Claude Code DSGVO: datenschutzkonform im Unternehmen einsetzen
 
-Claude Code lässt sich DSGVO-konform im Unternehmen einsetzen, wenn drei Dinge zusammenkommen: ein kommerzieller Vertrag (Team, Enterprise, API oder ein Cloud-Anbieter wie Amazon Bedrock) mit geklärtem Auftragsverarbeitungsvertrag, eine bewusst gewählte Region und technische Einstellungen, die Telemetrie, Feedback-Uploads und personenbezogene Daten im Prompt begrenzen. Alles, was Claude Code liest oder du eingibst, geht als Prompt an das Modell; deshalb entscheidet die Betriebsvariante darüber, wer die Daten verarbeitet und wie lange sie gespeichert werden.
+Für einen datenschutzkonformen Einsatz von Claude Code im Unternehmen braucht es mindestens drei Dinge: einen kommerziellen Vertrag (Team, Enterprise, API oder einen Cloud-Anbieter wie Amazon Bedrock) mit geklärtem Auftragsverarbeitungsvertrag und Drittlandtransfer, eine bewusst gewählte Region und technische Einstellungen, die Telemetrie, Feedback-Uploads und personenbezogene Daten im Prompt begrenzen. Ob das im Einzelfall reicht, bewertet der Datenschutzbeauftragte. Alles, was Claude Code liest oder du eingibst, geht als Prompt an das Modell; deshalb entscheidet die Betriebsvariante darüber, wer die Daten verarbeitet und wie lange sie gespeichert werden.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 Diese Anleitung ist keine Rechtsberatung. Sie fasst zusammen, was die offizielle Doku von Anthropic zu Datenflüssen und Aufbewahrung sagt, und zeigt die Einstellungen, mit denen du die Menge der Daten technisch begrenzt. Die rechtliche Bewertung treffen Datenschutzbeauftragter und Rechtsabteilung.
 
@@ -13,7 +13,7 @@ Diese Anleitung ist keine Rechtsberatung. Sie fasst zusammen, was die offizielle
 - Zero Data Retention gibt es nur für qualifizierte Konten auf Claude for Enterprise, nach Freischaltung durch Anthropic, und nicht für jede Funktion.
 - Telemetrie, Fehlerberichte, `/feedback` und Umfragen schaltest du zentral über den `env`-Block der Managed Settings ab; `/feedback` speichert Transkripte 5 Jahre.
 - Lokale Transkripte liegen im Klartext unter `~/.claude/projects/` und werden nach `cleanupPeriodDays` (Standard 30 Tage) gelöscht.
-- Technisch verhindern Hooks mit deutschen Prüfziffern (IBAN, Steuer-ID, Sozialversicherungsnummer), dass personenbezogene Daten überhaupt im Prompt landen.
+- Hooks mit deutschen Prüfziffern erkennen IBAN, Steuer-ID und Sozialversicherungsnummer in Prompts, Shell-Befehlen und neu geschriebenem Code. Inhalte, die Claude Code aus Dateien liest, prüfen sie nicht, und Namen oder Anschriften erkennen sie nicht; Datenordner sperrst du deshalb zusätzlich mit deny-Regeln und arbeitest mit Testdaten ohne Echtdaten.
 
 ## Welche Daten sendet Claude Code an Anthropic?
 
@@ -56,7 +56,7 @@ Voraussetzungen und Grenzen:
 - ZDR gilt nur auf Anthropics direkter Plattform. Für Bedrock, Vertex AI und Foundry gelten deren Aufbewahrungsrichtlinien.
 - Nicht abgedeckt sind Chat auf claude.ai, Cowork, Claude Code Analytics (Metadaten wie Konto-E-Mail und Nutzungsstatistik), Nutzer- und Seat-Verwaltung sowie Daten, die MCP-Server und andere Drittintegrationen verarbeiten.
 - Unter ZDR sind Cloud-Sessions, Claude Tag, Artifacts, `/feedback`, `/bug`, `/share` und Remote Control serverseitig gesperrt.
-- Bei einem Verstoß gegen die Nutzungsrichtlinie kann Anthropic Ein- und Ausgaben bis zu 2 Jahre aufbewahren.
+- Bei einem Verstoß gegen die Nutzungsrichtlinie kann Anthropic Ein- und Ausgaben bis zu 2 Jahre und die Ergebnisse der Sicherheitsklassifizierung bis zu 7 Jahre aufbewahren ([Privacy Center](https://privacy.claude.com/en/articles/7996866-how-long-do-you-store-my-organization-s-data), Stand 01.07.2026).
 - Fable 5.1 und Fable 5 sind "Covered Models", die standardmäßig Datenaufbewahrung erfordern; ob eine ZDR-Organisation sie nutzen kann, regeln die Covered-Models-Richtlinien.
 - ZDR wirkt nur für Sitzungen, die sich in die ZDR-Organisation einloggen. Ein privates Konto oder ein API-Schlüssel einer anderen Organisation ist nicht abgedeckt. Dagegen helfen `forceLoginMethod` und `forceLoginOrgUUID` in den Managed Settings.
 
@@ -152,7 +152,7 @@ Claude Code speichert Sitzungstranskripte im Klartext unter `~/.claude/projects/
 Einstellungen begrenzen, wohin Daten gehen. Sie verhindern nicht, dass jemand eine Kundenliste in den Prompt kopiert oder der Agent eine Datei mit Personaldaten liest. Dafür gibt es drei technische Schichten:
 
 1. **deny-Regeln in settings.json** sperren Dateien mit Secrets und bekannten Datenablagen für die Datei-Tools. Sie greifen auch für erkannte Bash-Befehle wie `cat`, aber nicht für beliebige Skripte.
-2. **Der Hook `pii_schutz.py`** aus der [Vorlage](../../src/claude_team/vorlage/.claude/hooks/pii_schutz.py) läuft bei `UserPromptSubmit` und vor `Edit`, `Write` und `Bash`. Er blockt IBAN (Mod 97), Steuer-ID (ISO 7064 Mod 11,10 plus Ziffernregel), Sozialversicherungsnummer (Prüfziffer der DRV) und Kreditkartennummern (Luhn), aber nur mit gültiger Prüfziffer. Beim Prompt blockt er, bevor der Text ans Modell geht. USt-IdNr. und viele E-Mail-Adressen oder Telefonnummern (ab 5) führen zu einer Rückfrage. Öffentliche Testwerte wie die Muster-IBAN `DE89 3704 0044 0532 0130 00` bleiben erlaubt.
+2. **Der Hook `pii_schutz.py`** aus der [Vorlage](../../src/claude_team/vorlage/.claude/hooks/pii_schutz.py) läuft bei `UserPromptSubmit` und vor `Edit`, `Write` und `Bash`, nicht vor `Read` oder `Grep`. Was Claude aus Dateien liest, prüft er also nicht. Er blockt IBAN (Mod 97), Steuer-ID (ISO 7064 Mod 11,10 plus Ziffernregel), Sozialversicherungsnummer (Prüfziffer der DRV) und Kreditkartennummern (Luhn), aber nur mit gültiger Prüfziffer. Beim Prompt blockt er, bevor der Text ans Modell geht. USt-IdNr. und viele E-Mail-Adressen oder Telefonnummern (ab 5) führen zu einer Rückfrage. Verbreitete Beispielwerte wie die Beispiel-IBAN `DE89 3704 0044 0532 0130 00` bleiben erlaubt. Namen, Anschriften und Gesundheitsdaten erkennt der Hook nicht. Grenzen im Detail: [Was die Hooks nicht abdecken](./claude-code-hooks.md#was-die-hooks-nicht-abdecken).
 3. **Das Profil streng** von `claude-team einrichten` sperrt zusätzlich WebFetch, WebSearch, `curl`, `wget`, `nc`, `scp` und `ssh` und schaltet Feedback und Umfragen ab.
 
 Konfiguriert wird der Hook in `.claude/schutz.json`:
@@ -178,7 +178,7 @@ Kanzleien, Steuerberatung, Arztpraxen, Versicherungen und andere Berufsgeheimnis
 - Ob Mandanten- oder Patientendaten technisch ausgeschlossen werden können, etwa durch Arbeit nur an Code ohne Echtdaten, deny-Regeln für Datenordner und den PII-Hook.
 - Ob Testdaten anonymisiert oder synthetisch sein müssen.
 
-## Beispiele
+## Beispiele für datenschutzfreundliche Einstellungen
 
 ### Beispiel 1: Managed Settings für Datenschutz-Grundschutz
 
@@ -245,7 +245,7 @@ Für automatisierte Läufe, deren Verlauf niemand fortsetzen muss.
 ### Beispiel 5: Team-Basis mit PII-Hook in ein Repo legen
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --profil streng --dry-run
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --profil streng --dry-run
 ```
 
 Zeigt, welche Dateien angelegt würden; ohne `--dry-run` legt der Befehl CLAUDE.md, settings.json, Hooks und `.claude/schutz.json` an und überschreibt nichts.
@@ -253,7 +253,7 @@ Zeigt, welche Dateien angelegt würden; ohne `--dry-run` legt der Befehl CLAUDE.
 ### Beispiel 6: Repo vor dem Commit auf personenbezogene Daten prüfen
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team scannen src/ --kontakte-ab 5
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team scannen src/ --kontakte-ab 5
 ```
 
 Für pre-commit und CI; Exit 1 bei einem Treffer.
@@ -313,7 +313,7 @@ Bei kommerziellen Konten standardmäßig 30 Tage, mit Zero Data Retention nicht 
 
 ### Bleiben die Daten mit Bedrock in der EU?
 
-Mit `AWS_REGION=eu-central-1` und dem Präfix `eu` läuft die Inferenz über EU-Regionen von AWS. Welche Regionen die Cross-Region-Inferenz genau nutzt und was AWS speichert, regeln AWS-Dokumentation und dein AWS-Vertrag; das prüfst du dort.
+Nicht automatisch. `AWS_REGION=eu-central-1` und `ANTHROPIC_BEDROCK_REGION_PREFIX=eu` sind laut [Doku](https://code.claude.com/docs/en/amazon-bedrock#cross-region-inference-profile-prefixes) nur eine Präferenz: Fehlt für ein Modell ein `eu.`-Profil, kann Claude Code auf ein anderes Profil ausweichen, etwa `global.`. Für eine belastbare EU-Verarbeitung pinnst du alle drei Modelle auf `eu.`-IDs, beschränkst `availableModels` auf diese IDs und erlaubst in der IAM-Policy nur EU-Regionen und `eu.`-Inference-Profile. Welche EU-Regionen ein `eu.`-Profil nutzt und was AWS speichert, regeln AWS-Dokumentation und dein AWS-Vertrag.
 
 ### Sendet Claude Code Daten, wenn ich Bedrock nutze?
 

@@ -2,7 +2,7 @@
 
 Claude Code vs Codex vs Cursor ist vor allem eine Frage der Bedienform und des Betriebs: Claude Code ist ein Agent, der im Terminal, in IDE-Erweiterungen und in einer Desktop-App läuft, Codex ist der Coding-Agent von OpenAI, und Cursor ist ein Editor mit eingebauten KI-Funktionen. Für Teams zählen neben der Modellqualität die Konfigurationsdateien, die Erweiterbarkeit mit Hooks, Skills und MCP-Servern, der Betrieb über eigene Cloud-Konten und die Datenschutz-Optionen. Diese Seite vergleicht sachlich, ohne Preise und Benchmarks, und belegt Aussagen zu Claude Code mit der offiziellen Doku; zu Codex und Cursor stehen nur allgemeine Merkmale, die du in deren Doku nachprüfst.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -19,10 +19,10 @@ Claude Code vs Codex vs Cursor ist vor allem eine Frage der Bedienform und des B
 | --- | --- | --- | --- |
 | Grundform | Agent im Terminal (CLI) | Coding-Agent von OpenAI, unter anderem als CLI | Editor (Fork von VS Code) mit KI-Funktionen |
 | IDE | Erweiterung für VS Code und Cursor, Plugin für JetBrains | laut Anbieter auch als IDE-Erweiterung | ist selbst die IDE |
-| Weitere Oberflächen | Desktop-App, Web | laut Anbieter auch in der Cloud | Editor im Mittelpunkt |
-| Headless und CI | `claude -p`, GitHub Actions, Agent SDK | laut Anbieter Ausführung ohne Oberfläche möglich | in der Doku des Anbieters prüfen |
+| Weitere Oberflächen | Desktop-App, Web | laut Anbieter auch in der Cloud | laut Anbieter auch CLI und [Cloud Agents](https://cursor.com/docs/cli/overview) |
+| Headless und CI | `claude -p`, GitHub Actions, Agent SDK | laut Anbieter Ausführung ohne Oberfläche möglich | laut Anbieter über die CLI ohne Oberfläche möglich |
 
-Die Spalten für Codex und Cursor beschreiben allgemein bekannte Merkmale. Funktionsumfang und Namen ändern sich schnell; prüft den aktuellen Stand in der Doku der Anbieter.
+Die Spalten für Codex und Cursor beschreiben allgemein bekannte Merkmale. Funktionsumfang und Namen ändern sich schnell; prüf den aktuellen Stand in der Doku der Anbieter.
 
 Claude Code und Cursor schließen sich nicht aus: Die Claude-Code-Erweiterung `anthropic.claude-code` läuft auch in Cursor. Siehe [Claude Code in VS Code und JetBrains](./claude-code-vscode-jetbrains.md).
 
@@ -55,7 +55,7 @@ Claude Code bietet laut Doku diese Erweiterungspunkte:
 | Plugins | Bündel aus Skills, Subagents, Hooks und MCP-Servern, verteilt über Marketplaces |
 | Agent SDK | dieselbe Agentenschleife als Bibliothek für Python und TypeScript |
 
-MCP ist ein offener Standard, den auch andere Werkzeuge unterstützen; die Einbindung unterscheidet sich je Werkzeug. Skills im Format `SKILL.md` aus diesem Repo funktionieren für Claude Code und Codex. Für Hooks und Plugins bei Codex und Cursor prüfst du die jeweilige Doku.
+MCP ist ein offener Standard, den auch andere Werkzeuge unterstützen; die Einbindung unterscheidet sich je Werkzeug. Skills im Format `SKILL.md` aus diesem Repo funktionieren für Claude Code und Codex; Cursor liest laut [Doku](https://cursor.com/docs/context/skills) ebenfalls `SKILL.md` und lädt dafür auch `.claude/skills/`. Für Hooks und Plugins bei Codex und Cursor prüfst du die jeweilige Doku.
 
 ## Wie betreibe ich die Werkzeuge im Unternehmen?
 
@@ -80,7 +80,7 @@ Für Claude Code laut Doku (Stand 15.10.2026):
 
 Für Codex und Cursor gelten die Datenschutzbedingungen der Anbieter. Das ist keine Rechtsberatung; klärt Auftragsverarbeitung, Speicherorte und Fristen mit dem Datenschutzbeauftragten. Siehe [Claude Code DSGVO](./claude-code-dsgvo.md).
 
-## Beispiele
+## Beispiele für den Vergleich
 
 ### Beispiel 1: Eine AGENTS.md für alle Werkzeuge, eingebunden in CLAUDE.md
 

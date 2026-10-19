@@ -2,7 +2,7 @@
 
 Gerüst für eine Datenschutz-Folgenabschätzung (DSFA) zum Einsatz von Claude Code. Es gibt die Gliederung vor und trägt die technischen Fakten zu Claude Code ein; Bewertung und Ergebnis liegen beim Verantwortlichen und beim Datenschutzbeauftragten.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 Diese Vorlage ist keine Rechtsberatung und ersetzt keine Prüfung im Einzelfall.
 
@@ -59,7 +59,7 @@ Ob eine DSFA nach Art. 35 DSGVO erforderlich ist, klärt der Datenschutzbeauftra
 | Anthropic, Telemetrie | Metriken ohne Code und Prompts | [abgeschaltet per `DISABLE_TELEMETRY`] |
 | Anthropic, `/feedback` | Verlauf mit Code, 5 Jahre | [abgeschaltet per `DISABLE_FEEDBACK_COMMAND`] |
 | Eigener Collector | [OpenTelemetry-Metriken, ggf. Ereignisse] | [Frist] |
-| Repo | Hook-Protokoll unter `.claude/protokoll/`, ohne Dateiinhalte | [Frist] |
+| Repo | Hook-Protokoll unter `.claude/protokoll/` (standardmäßig aus), ohne Dateiinhalte | [Frist, Standard `aufbewahrung_tage`: 30] |
 
 Quelle der Herstellerangaben: [Data usage](https://code.claude.com/docs/en/data-usage), [Zero data retention](https://code.claude.com/docs/en/zero-data-retention). Ausführlich: [Claude Code DSGVO](../anleitungen/claude-code-dsgvo.md).
 
@@ -97,7 +97,7 @@ Bewertung durch [Firma]. Die Spalten Eintrittswahrscheinlichkeit und Schwere ble
 
 | Risiko | Maßnahme | Restrisiko |
 | --- | --- | --- |
-| R1 | Hook `pii_schutz.py` blockt IBAN, Steuer-ID, SV-Nummer und Kreditkarte mit gültiger Prüfziffer vor dem Senden; deny-Regeln für Datenordner; Schulung; `claude-team scannen` in CI | [ ] |
+| R1 | Deny-Regeln für Datenordner (Read, Grep, Bash); Hook `pii_schutz.py` erkennt IBAN, Steuer-ID, SV-Nummer und Kreditkarte mit gültiger Prüfziffer in Prompts, Befehlen und geschriebenem Code, nicht in gelesenen Dateien; Schulung; `claude-team scannen` in CI | [ ] |
 | R2 | `cleanupPeriodDays: [x]`; `DISABLE_FEEDBACK_COMMAND=1`; [Zero Data Retention]; Löschfrist für Protokolle | [ ] |
 | R3 | Allowlist für MCP-Server; `strictKnownMarketplaces`; [Sandbox mit `allowedDomains`]; [deny für WebFetch und `curl`] | [ ] |
 | R4 | deny-Regeln für Secrets in den Managed Settings; Hook `secrets_schutz.py`; `disableBypassPermissionsMode` | [ ] |

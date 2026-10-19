@@ -2,7 +2,7 @@
 
 Claude Code startest du in einer Sandbox auf zwei Arten: Die eingebaute Sandbox schaltest du in der Sitzung mit `/sandbox` oder mit `"sandbox": {"enabled": true}` in der settings.json ein, dann laufen Shell-Befehle unter Seatbelt (macOS) oder bubblewrap (Linux, WSL 2). Für eine komplett abgeschottete Umgebung nimmst du einen Devcontainer mit dem Feature `ghcr.io/anthropics/devcontainer-features/claude-code:1.0` oder einen eigenen Docker-Container. Die eingebaute Sandbox kapselt nur Bash-, PowerShell- und Monitor-Befehle, ein Container dagegen den ganzen Prozess samt Hooks und MCP-Servern.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -41,7 +41,7 @@ Es gibt zwei Modi: Auto-allow führt Befehle in der Sandbox ohne Rückfrage aus,
 
 Subagents nutzen dieselbe Sandbox-Konfiguration wie die Hauptsitzung.
 
-## Beispiele
+## Beispiele für die Sandbox
 
 ### Beispiel 1: Sandbox einschalten und prüfen
 

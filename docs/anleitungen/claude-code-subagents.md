@@ -2,7 +2,7 @@
 
 Ein Claude Code Subagent lohnt sich, wenn eine Aufgabe viel Ausgabe erzeugt, die du im Hauptgespräch nicht brauchst, eigene Tool-Grenzen haben soll oder für sich abgeschlossen ist und nur eine Zusammenfassung zurückgeben muss. Du definierst ihn als Markdown-Datei mit Frontmatter unter `.claude/agents/<name>.md` im Projekt oder unter `~/.claude/agents/` für alle eigenen Projekte. Der Text unter dem Frontmatter wird zum System-Prompt des Subagents.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -110,7 +110,7 @@ Einzelne Subagents verbietest du mit `Agent(<name>)` in den deny-Regeln. Das Too
 
 Für eine einzelne Sitzung: `claude --disallowedTools "Agent(Explore)"`.
 
-## Beispiele
+## Beispiele für Claude Code Subagents
 
 ### Beispiel 1: code-reviewer, der nichts ändert
 
@@ -299,4 +299,5 @@ Ja. Claude kann mehrere Subagents gleichzeitig starten, etwa für parallele Rech
 - [Claude Code Plugins](./claude-code-plugins.md): Subagents versioniert verteilen
 - [Claude Code Permissions](./claude-code-permissions.md): was ein Subagent darf
 - Vorlagen: [code-reviewer](../../src/claude_team/vorlage/.claude/agents/code-reviewer.md), [datenschutz-check](../../src/claude_team/vorlage/.claude/agents/datenschutz-check.md)
+- [Claude Agent SDK: eigene Agenten auf Basis von Claude Code bauen](./claude-agent-sdk.md)
 - Offizielle Doku: [Subagents](https://code.claude.com/docs/en/sub-agents)

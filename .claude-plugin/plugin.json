@@ -2,7 +2,7 @@
   "name": "team-basis",
   "displayName": "Claude Code Team-Basis",
   "description": "Claude Code Best Practices für Teams als Plugin: Hooks gegen Secrets, deutsche personenbezogene Daten (IBAN, Steuer-ID, Sozialversicherungsnummer) und gefährliche Befehle, zwei Subagents für Code-Review und Datenschutz, Skills für Audit, Einrichtung, CLAUDE.md und eigene Hooks.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Pexon Consulting GmbH",
     "url": "https://github.com/pexon-consulting"
@@ -22,9 +22,5 @@
   "skills": [
     "./skills/",
     "./src/claude_team/vorlage/.claude/skills/"
-  ],
-  "agents": [
-    "./src/claude_team/vorlage/.claude/agents/code-reviewer.md",
-    "./src/claude_team/vorlage/.claude/agents/datenschutz-check.md"
   ]
 }

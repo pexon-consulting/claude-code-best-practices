@@ -27,7 +27,7 @@ echo '{"tool_name":"Read","tool_input":{"file_path":".env"}}' | python3 .claude/
 14. [Hook: Umgebungsvariablen auflisten](#beispiel-14)
 15. [Hook: Token im neuen Code](#beispiel-15)
 16. [Hook: echte IBAN in eine Datei](#beispiel-16)
-17. [Hook: Muster-IBAN für Tests](#beispiel-17)
+17. [Hook: Beispiel-IBAN für Tests](#beispiel-17)
 18. [Hook: Steuer-ID im Prompt](#beispiel-18)
 19. [Hook: USt-IdNr. fragt nur nach](#beispiel-19)
 20. [Hook: eingefügter Kundenexport](#beispiel-20)
@@ -97,7 +97,7 @@ claude-team audit . --format markdown --ignorieren CC003,CC019,CC020,CC044
 ```markdown
 # Claude-Code-Prüfung: .
 
-8 Fehler, 6 Warnungen, 0 Hinweise. Geprüft mit claude-team 0.1.0.
+8 Fehler, 6 Warnungen, 0 Hinweise. Geprüft mit claude-team 0.2.0.
 
 | Stufe | Regel | Datei | Befund |
 | --- | --- | --- | --- |
@@ -129,7 +129,7 @@ claude-team audit . --format json
 ```json
 {
   "werkzeug": "claude-team",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "pfad": ".",
   "anzahl": {
     "fehler": 8,
@@ -160,14 +160,17 @@ claude-team audit . --format json
 <a id="beispiel-4"></a>
 ## 4. Ein eingerichtetes Repo
 
-Direkt nach `claude-team einrichten` meldet das Audit nichts mehr, auch keine Hinweise.
+Direkt nach `claude-team einrichten` meldet das Audit keine Fehler und Warnungen mehr. Übrig bleibt der Hinweis auf Platzhalter in der CLAUDE.md, die nur du ausfüllen kannst.
 
 ```bash
 claude-team einrichten . && claude-team audit . --schwelle hinweis
 ```
 
 ```text
-.: keine Befunde.
+HINWEIS CC007 CLAUDE.md:36
+        Noch nicht ausgefüllt: {{BEKANNTE_FALLE_1}}, {{BEKANNTE_FALLE_2}}, {{EIN_SATZ_WAS_DAS_PROJEKT_TUT}}. Claude liest die Platzhalter wörtlich.
+
+0 Fehler, 0 Warnungen, 1 Hinweis.
 ```
 
 <a id="beispiel-5"></a>
@@ -292,7 +295,7 @@ ruff check . && ruff format --check .         # Lint und Format
 <a id="beispiel-9"></a>
 ## 9. Repo nach Secrets und Kundendaten scannen
 
-Durchsucht alle Dateien, die Git kennt. Die Muster-IBAN der Bundesbank zählt nicht, eine echte IBAN schon. Werte erscheinen nur maskiert.
+Durchsucht alle Dateien, die Git kennt. Eine verbreitete Beispiel-IBAN zählt nicht, eine IBAN mit gültiger Prüfziffer schon. Werte erscheinen nur maskiert.
 
 ```bash
 claude-team scannen .
@@ -333,8 +336,8 @@ CC003  hinweis  CLAUDE.md nennt keine Befehle
 CC004  fehler   @-Import zeigt auf fehlende Datei
 CC005  fehler   CLAUDE.local.md nicht in .gitignore
 CC006  hinweis  AGENTS.md wird neben CLAUDE.md nicht gelesen
+CC007  hinweis  Platzhalter {{...}} in CLAUDE.md nicht ausgefüllt
 CC010  fehler   settings.json ist kein gültiges JSON
-CC011  fehler   settings.local.json im Repo
 ...
 CC044  hinweis  Subagent ohne tools-Liste
 CC050  fehler   .env im Repo oder nicht ignoriert
@@ -373,7 +376,7 @@ Antwort:
 <a id="beispiel-13"></a>
 ## 13. Hook: .env über Bash ausgeben
 
-Die deny-Regel `Read(.env)` erkennt `cat .env`, aber nicht jeden Umweg. Der Hook prüft jeden Lesebefehl in der Kette.
+Die deny-Regel `Read(.env)` erkennt `cat .env`, aber nicht jeden Umweg. Der Hook sucht in jedem Teil der Kette nach Pfaden zu Zugangsdaten, auch in Interpreter-Code wie `python -c`.
 
 Eingabe für `secrets_schutz.py`:
 
@@ -483,15 +486,15 @@ Antwort:
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "Personenbezogene Daten gefunden: IBAN DE27****************78. Durch Testdaten ersetzen (z.B. die Muster-IBAN DE89 3704 0044 0532 0130 00)."
+    "permissionDecisionReason": "Personenbezogene Daten gefunden: IBAN DE27****************78. Durch Testdaten ersetzen (z.B. die verbreitete Beispiel-IBAN DE89 3704 0044 0532 0130 00)."
   }
 }
 ```
 
 <a id="beispiel-17"></a>
-## 17. Hook: Muster-IBAN für Tests
+## 17. Hook: Beispiel-IBAN für Tests
 
-Die Muster-IBAN der Bundesbank und bekannte Testkarten sind erlaubt.
+Verbreitete Beispiel-IBANs aus Dokumentationen und bekannte Testkarten sind erlaubt.
 
 Eingabe für `pii_schutz.py`:
 
@@ -531,7 +534,7 @@ Antwort:
 ```json
 {
   "decision": "block",
-  "reason": "Personenbezogene Daten gefunden: Steuer-ID 6589*****62. Durch Testdaten ersetzen (z.B. die Muster-IBAN DE89 3704 0044 0532 0130 00). Der Prompt wurde nicht gesendet."
+  "reason": "Personenbezogene Daten gefunden: Steuer-ID 6589*****62. Durch Testdaten ersetzen (z.B. die verbreitete Beispiel-IBAN DE89 3704 0044 0532 0130 00). Der Prompt wurde nicht gesendet."
 }
 ```
 
@@ -578,7 +581,7 @@ Eingabe für `pii_schutz.py`:
   "tool_name": "Write",
   "tool_input": {
     "file_path": "/projekt/import.csv",
-    "content": "kunde0@firma-0.de\\n... (6 Adressen)"
+    "content": "kunde0@firma-0.example\\n... (6 Adressen)"
   }
 }
 ```
@@ -646,7 +649,7 @@ Antwort:
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "git push --force überschreibt fremde Commits. --force-with-lease nutzen oder den Nutzer pushen lassen."
+    "permissionDecisionReason": "git push --force (auch -f oder +branch) überschreibt fremde Commits. --force-with-lease nutzen oder den Nutzer pushen lassen."
   }
 }
 ```
@@ -758,7 +761,7 @@ Antwort:
 <a id="beispiel-27"></a>
 ## 27. Hook: Protokoll ohne Inhalte
 
-Eine Zeile je Tool-Aufruf in `.claude/protokoll/<datum>.jsonl`. Tokens im Befehl werden ersetzt, Dateiinhalte nie gespeichert. Gezeigt ist die geschriebene Zeile.
+Standardmäßig aus, eingeschaltet mit `"protokoll": {"aktiv": true}` in `.claude/schutz.json`. Eine Zeile je Tool-Aufruf in `.claude/protokoll/<datum>.jsonl`. Tokens, Kennungen und E-Mail-Adressen im Befehl werden ersetzt, Dateiinhalte nie gespeichert, Dateien nach `aufbewahrung_tage` (Standard 30) gelöscht. Gezeigt ist die geschriebene Zeile.
 
 Eingabe für `protokoll.py`:
 

@@ -21,7 +21,7 @@ Teil von Claude Code Best Practices für Teams.
    - `## Fallen`: konkrete Stellen, an denen Menschen und Agents sich schon vertan haben.
 4. Alles, was nur für einen Teil des Codes gilt, kommt nach `.claude/rules/<thema>.md` mit `paths` im Frontmatter, z.B. `paths: ["src/api/**/*.ts"]`.
 5. Gibt es eine `AGENTS.md` für andere Agents, schreibe in die CLAUDE.md die Zeile `@AGENTS.md`, statt den Inhalt zu kopieren. Claude Code liest AGENTS.md sonst nicht, solange eine CLAUDE.md existiert.
-6. Prüfe am Ende: unter 200 Zeilen, jeder @-Import zeigt auf eine vorhandene Datei, keine Tokens, keine Kundendaten. Optional: `uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit .`
+6. Prüfe am Ende: unter 200 Zeilen, jeder @-Import zeigt auf eine vorhandene Datei, keine Tokens, keine Kundendaten. Optional: `uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .`
 
 ## Stil
 

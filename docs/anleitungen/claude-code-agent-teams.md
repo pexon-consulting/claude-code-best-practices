@@ -2,7 +2,7 @@
 
 Claude Code Agent Teams sind eine experimentelle Funktion, bei der eine Hauptsitzung als Lead mehrere eigenständige Claude-Code-Instanzen als Teammitglieder startet, die über eine gemeinsame Aufgabenliste und direkte Nachrichten zusammenarbeiten. Sie lohnen sich für Recherche, Reviews mit mehreren Blickwinkeln, Debugging mit konkurrierenden Hypothesen und Funktionen mit klar getrennten Teilen; für fokussierte Aufgaben, bei denen nur das Ergebnis zählt, reichen Subagents und sind günstiger. Damit sich parallele Änderungen nicht überschreiben, gibt es Git-Worktrees: `claude --worktree <name>` für eigene Sitzungen und `isolation: worktree` für Subagents.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -114,7 +114,7 @@ Subagents, die Dateien ändern, bekommen mit `isolation: worktree` im Frontmatte
 
 `/batch <anweisung>` untersucht die Codebasis, zerlegt die Arbeit in 5 bis 30 unabhängige Einheiten und legt einen Plan vor. Nach deiner Freigabe arbeitet je Einheit ein Subagent im Hintergrund in eigenem Worktree.
 
-## Beispiele
+## Beispiele für Claude Code Agent Teams
 
 ### Beispiel 1: Paralleles Review mit drei Blickwinkeln
 

@@ -1,8 +1,8 @@
-# Claude Code Befehle: Slash Commands, CLI-Flags und Shortcuts als Cheat Sheet
+# Claude Code Befehle: alle Slash Commands, CLI-Flags und Tastenkürzel erklärt
 
 Claude Code hat eingebaute Slash Commands wie `/clear`, `/compact`, `/model`, `/plan`, `/permissions` und `/mcp`, die du am Anfang einer Nachricht tippst. Eigene Befehle legst du als Skill unter `.claude/skills/<name>/SKILL.md` an, sie erscheinen dann als `/name`. Diese Seite sammelt die wichtigsten Slash Commands, CLI-Flags und Tastenkürzel zum Nachschlagen.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -184,7 +184,7 @@ Entfernt wurden unter anderem `/vim` (v2.1.92, jetzt über `/config`), `/pr-comm
 
 Auf macOS brauchen die `Alt`-Kürzel die Einstellung "Option as Meta" im Terminal.
 
-## Beispiele
+## Beispiele für Claude Code Befehle
 
 ### Beispiel 1: eigener Befehl /fix-issue
 

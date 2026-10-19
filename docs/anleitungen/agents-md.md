@@ -2,7 +2,7 @@
 
 Claude Code liest eine AGENTS.md seit v2.1.277 selbst, aber standardmäßig nur dann, wenn im Arbeitsverzeichnis und darüber keine CLAUDE.md, keine `.claude/CLAUDE.md` und keine CLAUDE.local.md liegt. Sobald eine CLAUDE.md existiert, ignoriert Claude Code die AGENTS.md. Die robuste, versionsunabhängige Lösung für Repos, in denen mehrere Coding-Agents arbeiten, ist deshalb eine CLAUDE.md, die mit `@AGENTS.md` beginnt und darunter nur Claude-spezifische Ergänzungen enthält.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -83,7 +83,7 @@ Eine AGENTS.md, die Claude Code über **Project instructions** liest, verhält s
 
 `@`-Imports und `claudeMdExcludes` funktionieren in einer AGENTS.md genauso wie in einer CLAUDE.md.
 
-## Beispiele
+## Beispiele für AGENTS.md und CLAUDE.md
 
 ### Beispiel 1: CLAUDE.md, die AGENTS.md importiert
 
@@ -180,7 +180,7 @@ fi
 Mit dem CLI aus diesem Repo geht es kürzer, die Regel [CC006](../regeln.md#cc006) prüft genau diesen Fall:
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit . --schwelle hinweis
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit . --schwelle hinweis
 ```
 
 ### Beispiel 7: Anweisungen aus anderen Tools übernehmen

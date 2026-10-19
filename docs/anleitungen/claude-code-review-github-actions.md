@@ -2,7 +2,7 @@
 
 Claude Code Review in GitHub Actions läuft über die offizielle Action `anthropics/claude-code-action@v1`: Du installierst die Claude GitHub App, legst das Secret `ANTHROPIC_API_KEY` oder `CLAUDE_CODE_OAUTH_TOKEN` an und kopierst einen Workflow, der bei jedem Pull Request das Review-Plugin oder einen eigenen `prompt` ausführt. Ohne `prompt` reagiert Claude nur auf `@claude` in Kommentaren, mit `prompt` läuft es automatisch; `--max-turns` und `--allowedTools` in `claude_args` begrenzen Kosten und Rechte.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -11,7 +11,7 @@ Claude Code Review in GitHub Actions läuft über die offizielle Action `anthrop
 - Ohne `prompt` läuft die Action im interaktiven Modus und wartet auf `@claude`, mit `prompt` im Automationsmodus bei jedem passenden Ereignis.
 - `claude_args` nimmt jedes CLI-Argument an, im Review-Workflow vor allem `--max-turns`, `--model` und `--allowedTools`.
 - Lokal prüfst du denselben Diff vorher mit `/code-review` (Alias `/review`) und `/security-review`, für eigene Skripte nutzt du `claude -p`.
-- Die Team-Basis des Repos (Settings, Hooks, MCP) prüft zusätzlich die Action `pexon-consulting/claude-code-best-practices@v0.1.0` und lädt die Befunde als SARIF zu GitHub Code Scanning hoch.
+- Die Team-Basis des Repos (Settings, Hooks, MCP) prüft zusätzlich die Action `pexon-consulting/claude-code-best-practices@v0.2.0` und lädt die Befunde als SARIF zu GitHub Code Scanning hoch.
 
 ## Welche Review-Varianten gibt es?
 
@@ -76,7 +76,7 @@ Die vollständige Liste steht in der Konfigurationsreferenz der Action: https://
 
 Häufige Werte für `claude_args`: `--max-turns` (begrenzt die Zahl der Runden), `--model`, `--mcp-config`, `--allowedTools` (Alias `--allowed-tools`, kommagetrennt), `--append-system-prompt` und `--debug`.
 
-## Beispiele
+## Beispiele für Claude Code Review
 
 ### Beispiel 1: Auf @claude in Kommentaren reagieren
 
@@ -302,7 +302,7 @@ jobs:
     timeout-minutes: 5
     steps:
       - uses: actions/checkout@v6
-      - uses: pexon-consulting/claude-code-best-practices@v0.1.0
+      - uses: pexon-consulting/claude-code-best-practices@v0.2.0
         with:
           pfad: .
           schwelle: fehler

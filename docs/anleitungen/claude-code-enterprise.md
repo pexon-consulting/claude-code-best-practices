@@ -2,7 +2,9 @@
 
 Claude Code Enterprise-Richtlinien erzwingst du über Managed Settings: eine `managed-settings.json` im Systemverzeichnis jedes Rechners, ein MDM-Profil oder Server-managed Settings aus der claude.ai-Admin-Konsole. Claude Code wendet diese Werte über allen anderen Ebenen an, so dass weder Nutzer- noch Projektdateien noch `--settings` sie überschreiben. Damit sperrst du den Bypass-Modus, legst deny-Regeln, Telemetrie, Login-Organisation, MCP-Allowlist und zulässige Plugin-Marketplaces für alle Entwickler fest.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -118,12 +120,12 @@ Für ein Firmen-Gateway lässt du nur `"customEndpoint"` zu. Claude Code akzepti
 {
   "strictKnownMarketplaces": [
     { "source": "github", "repo": "anthropics/claude-plugins-official" },
-    { "source": "github", "repo": "pexon-consulting/claude-code-best-practices" }
+    { "source": "github", "repo": "your-org/claude-code-best-practices", "ref": "v0.2.0" }
   ]
 }
 ```
 
-`github`-Einträge passen exakt, inklusive `ref` und `path`. Ab v2.1.223 erlaubt `"<owner>/*"` alle Repos einer Organisation. Der Key registriert nichts; zum Vorinstallieren kombinierst du ihn mit `extraKnownMarketplaces`.
+Der zweite Eintrag gibt einen geprüften Fork in der eigenen Organisation frei, gepinnt auf einen Tag. Fremde Repos trägst du besser nicht direkt ein: Plugins führen Hooks auf jedem Rechner aus, und ohne `ref` gilt immer der aktuelle Stand des Repos. `github`-Einträge passen exakt, inklusive `ref` und `path`; ein Eintrag mit `ref` erlaubt nur genau diesen Ref. Ab v2.1.223 erlaubt `"<owner>/*"` alle Repos einer Organisation. Der Key registriert nichts; zum Vorinstallieren kombinierst du ihn mit `extraKnownMarketplaces`.
 
 ### MCP-Server zentral steuern
 
@@ -175,7 +177,7 @@ Die Doku belegt zu SSO Folgendes: Claude for Teams enthält Admin-Werkzeuge, SSO
 
 Server-managed Settings haben Grenzen: Sie gelten nur für Sitzungen mit direkter Anthropic-Anmeldung, nicht für Bedrock, Vertex AI oder Foundry, und nicht, wenn `ANTHROPIC_BASE_URL` woandershin zeigt. Die claude.ai-Konsole kann noch nicht nach Gruppen unterscheiden. Änderungen an Hooks oder `env` warten in interaktiven Sitzungen auf eine Bestätigung des Entwicklers.
 
-## Beispiele
+## Beispiele für Claude Code Enterprise
 
 ### Beispiel 1: Datei auf macOS verteilen
 

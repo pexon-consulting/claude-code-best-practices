@@ -1,6 +1,6 @@
 # Vorlagen für die zentrale Verteilung
 
-`managed-settings.json` ist eine Ausgangsfassung der Managed Settings für Claude Code. Sie sperrt den Bypass-Modus, blockiert das Lesen von `.env`, Schlüsseldateien und Cloud-Credentials, schaltet Telemetrie, Fehlerberichte und Feedback ab, löscht lokale Verläufe nach 14 Tagen, setzt eine Mindestversion und erlaubt Plugins nur aus dem offiziellen Marketplace und diesem Repo.
+`managed-settings.json` ist eine Ausgangsfassung der Managed Settings für Claude Code. Sie sperrt den Bypass-Modus, blockiert das Lesen von `.env`, Schlüsseldateien und Cloud-Credentials, schaltet Telemetrie, Fehlerberichte und Feedback ab, löscht lokale Verläufe nach 14 Tagen, setzt eine Mindestversion und erlaubt Plugins nur aus dem offiziellen Marketplace von Anthropic.
 
 > Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../README.md).
 
@@ -18,6 +18,7 @@ Der alte Windows-Pfad unter `C:\ProgramData` wird nicht mehr gelesen. Per MDM ge
 
 - `cleanupPeriodDays` und `requiredMinimumVersion` auf die eigenen Vorgaben setzen.
 - In `strictKnownMarketplaces` nur die Marketplaces eintragen, die freigegeben sind. Ein leeres Array sperrt alle.
+- Plugins aus fremden Repos, auch das Plugin `team-basis` aus diesem Repo, nicht direkt freigeben. Plugins führen Hooks auf jedem Rechner aus, und ein Eintrag ohne `ref` folgt immer dem aktuellen Stand. Besser: Repo in die eigene Organisation forken, den Fork prüfen und nur ihn eintragen, etwa `{ "source": "github", "repo": "your-org/claude-code-best-practices" }`. Ein `github`-Eintrag kann laut Doku zusätzlich `ref` enthalten und erlaubt dann nur genau diesen Ref; Nutzer müssen den Marketplace dann mit `your-org/claude-code-best-practices@<ref>` hinzufügen.
 - Optional ergänzen: `forceLoginMethod` und `forceLoginOrgUUID`, `allowedProviders`, `allowedMcpServers`, `sandbox`. Beispiele stehen in der Enterprise-Anleitung.
 
 ## Prüfen

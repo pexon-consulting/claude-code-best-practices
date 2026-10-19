@@ -1,10 +1,10 @@
 # Rollout-Unterlagen für Claude Code im Unternehmen
 
-Vorlagen zum Ausfüllen, mit denen Sie Claude Code durch die Freigabe bei IT-Sicherheit, Datenschutz, Legal, Betriebsrat und Management bringen. Jede Unterlage ist für eine Zielgruppe geschrieben, enthält schon die technischen Fakten zu Claude Code und lässt die unternehmensspezifischen Angaben als Platzhalter offen.
+Vorlagen zum Ausfüllen, mit denen du Claude Code durch die Freigabe bei IT-Sicherheit, Datenschutz, Legal, Betriebsrat und Management bringen. Jede Unterlage ist für eine Zielgruppe geschrieben, enthält schon die technischen Fakten zu Claude Code und lässt die unternehmensspezifischen Angaben als Platzhalter offen.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
-Die Unterlagen sind keine Rechtsberatung. Rechtsnormen wie Art. 28, 32 und 35 DSGVO, § 203 StGB oder § 87 BetrVG werden nur als Punkte genannt, die Sie mit den zuständigen Stellen klären.
+Die Unterlagen sind keine Rechtsberatung. Rechtsnormen wie Art. 28, 32 und 35 DSGVO, § 203 StGB oder § 87 BetrVG werden nur als Punkte genannt, die du mit den zuständigen Stellen klärst.
 
 ## Welche Unterlage für wen?
 
@@ -38,14 +38,14 @@ Pilotplan  ->  Freigabe-Paket ->  Pilotstart    ->  Auswertung, Entscheidung
                Betriebsrat-Info
 ```
 
-Die Wochen sind ein Beispiel. In vielen Unternehmen dauert die Freigabe länger als der Pilot selbst; starten Sie sie deshalb so früh wie möglich.
+Die Wochen sind ein Beispiel. In vielen Unternehmen dauert die Freigabe länger als der Pilot selbst; starte sie deshalb so früh wie möglich.
 
-## So nutzen Sie die Vorlagen
+## So nutzt du die Vorlagen
 
 - Platzhalter stehen in eckigen Klammern, zum Beispiel `[Firma]`, `[Datum]`, `[Name, Rolle]`.
-- Abschnitte, die für Ihre Betriebsvariante nicht gelten, löschen Sie, statt sie leer zu lassen.
-- Fakten zu Claude Code sind mit Quelle in der offiziellen Doku belegt. Prüfen Sie vor der Abgabe, ob der Stand noch aktuell ist; Claude Code erscheint oft in neuen Versionen.
-- Halten Sie die ausgefüllten Fassungen in Ihrem internen Dokumentensystem, nicht in diesem öffentlichen Repo.
+- Abschnitte, die für deine Betriebsvariante nicht gelten, löschst du, statt sie leer zu lassen.
+- Fakten zu Claude Code sind mit Quelle in der offiziellen Doku belegt. Prüf vor der Abgabe, ob der Stand noch aktuell ist; Claude Code erscheint oft in neuen Versionen.
+- Halte die ausgefüllten Fassungen in deinem internen Dokumentensystem, nicht in diesem öffentlichen Repo.
 
 ## Typische Fragen der Gremien
 
@@ -59,7 +59,7 @@ Die Wochen sind ein Beispiel. In vielen Unternehmen dauert die Freigabe länger 
 
 ## Was vor der Abgabe technisch stehen sollte
 
-Die Unterlagen beschreiben eine Konfiguration. Gremien fragen oft nach einem Nachweis, dass sie wirklich greift. Halten Sie deshalb vor der Abgabe Folgendes bereit:
+Die Unterlagen beschreiben eine Konfiguration. Gremien fragen oft nach einem Nachweis, dass sie wirklich greift. Halte deshalb vor der Abgabe Folgendes bereit:
 
 - [ ] Managed Settings auf einem Testrechner verteilt; `/status` nennt sie als Quelle.
 - [ ] Gegenprobe: `claude --dangerously-skip-permissions` wird abgelehnt, das Lesen von `.env` blockiert.
@@ -68,7 +68,7 @@ Die Unterlagen beschreiben eine Konfiguration. Gremien fragen oft nach einem Nac
 - [ ] Vertragsweg und Region sind entschieden, damit Datenflüsse und TOM konkret ausgefüllt werden können.
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit . --format markdown --out audit.md
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit . --format markdown --out audit.md
 ```
 
 ## Pflege der Unterlagen

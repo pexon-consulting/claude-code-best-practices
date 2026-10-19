@@ -2,7 +2,7 @@
 
 Einen MCP-Server fügst du in Claude Code mit `claude mcp add` hinzu, zum Beispiel `claude mcp add --transport http sentry https://mcp.sentry.dev/mcp`. Standardmäßig landet der Eintrag nur für dich in `~/.claude.json`. Mit `--scope project` schreibt Claude Code ihn in die Datei `.mcp.json` im Projekt-Root, die du committest und so mit dem Team teilst.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -94,7 +94,7 @@ Variablen wie `${VAR}` und `${VAR:-standard}` werden in `command`, `args`, `env`
 
 Eine Besonderheit schützt deine Zugangsdaten: `ANTHROPIC_API_KEY`, `ANTHROPIC_AUTH_TOKEN`, `AWS_BEARER_TOKEN_BEDROCK` und `NPM_TOKEN` liest Claude Code in `url` und `headers` von Remote-Servern als leer. Eine fremde `.mcp.json` kann sie so nicht an einen beliebigen Server schicken. Für eigene Server legst du deshalb eine eigene Variable an.
 
-## Beispiele
+## Beispiele für Claude Code MCP
 
 Die Beispiele 1 bis 3 stammen aus der Vorlage [.mcp.json.example](../../src/claude_team/vorlage/.mcp.json.example).
 

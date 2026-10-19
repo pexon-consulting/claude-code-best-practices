@@ -11,7 +11,7 @@ Teil von Claude Code Best Practices für Teams.
 ## Ablauf
 
 1. Probelauf im Projektordner zeigen, nichts wird geschrieben:
-   `uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run`
+   `uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run`
 2. Erkläre die Liste: `angelegt` ist neu, `vorschlag` heißt, die Datei existiert und daneben entsteht `CLAUDE.vorschlag.md` oder `.claude/settings.vorschlag.json`, `bleibt` heißt, eine eigene Version wird nicht angefasst, `ergänzt` gilt für `.gitignore`.
 3. Frage, welche Bausteine weg sollen. Möglich mit `--ohne`: `claude-md`, `settings`, `hooks`, `regeln`, `agents`, `skills`, `mcp`, `gitignore`. Für Teams mit strengem Datenschutz `--profil streng` anbieten (sperrt WebFetch, WebSearch, curl, wget, ssh).
 4. Nach Zustimmung ohne `--dry-run` ausführen.

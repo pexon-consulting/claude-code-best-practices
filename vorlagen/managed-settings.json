@@ -35,7 +35,6 @@
   "cleanupPeriodDays": 14,
   "requiredMinimumVersion": "2.1.294",
   "strictKnownMarketplaces": [
-    { "source": "github", "repo": "anthropics/claude-plugins-official" },
-    { "source": "github", "repo": "pexon-consulting/claude-code-best-practices" }
+    { "source": "github", "repo": "anthropics/claude-plugins-official" }
   ]
 }

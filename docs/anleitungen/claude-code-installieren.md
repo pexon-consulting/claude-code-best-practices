@@ -2,7 +2,7 @@
 
 Claude Code installierst du am einfachsten mit dem nativen Installer: `curl -fsSL https://claude.ai/install.sh | bash` auf macOS, Linux und WSL oder `irm https://claude.ai/install.ps1 | iex` in der Windows PowerShell. Du brauchst macOS 13+, Windows 10 1809+, Ubuntu 20.04+, Debian 10+ oder Alpine 3.19+, mindestens 4 GB RAM, eine Internetverbindung und ein Pro-, Max-, Team-, Enterprise- oder Console-Konto (der kostenlose claude.ai-Plan reicht nicht). Danach startest du `claude` im Projektordner, meldest dich im Browser an und prüfst die Installation mit `claude doctor`.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -44,7 +44,7 @@ Homebrew bietet zwei Casks: `claude-code` folgt dem Kanal `stable` (meist etwa e
 
 Die npm-Variante installiert dasselbe native Binary wie der Installer. Sie läuft zur Laufzeit also nicht über dein Node.js. Unterstützte Plattformen sind `darwin-arm64`, `darwin-x64`, `linux-x64`, `linux-arm64`, `linux-x64-musl`, `linux-arm64-musl`, `win32-x64` und `win32-arm64`. Zum Aktualisieren nimmst du `npm install -g @anthropic-ai/claude-code@latest`, nicht `npm update -g`.
 
-## Beispiele
+## Beispiele für die Installation
 
 ### Beispiel 1: Installation auf macOS oder Linux mit Prüfung
 
@@ -155,9 +155,9 @@ Nach der Installation legst du im Repo die gemeinsame Basis an: CLAUDE.md, `.cla
 
 ```bash
 cd /pfad/zu/deinem/projekt
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten .
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .
 ```
 
 `einrichten` überschreibt nichts. Gibt es schon eine settings.json oder CLAUDE.md, entsteht `.claude/settings.vorschlag.json` bzw. `CLAUDE.vorschlag.md`. Das Profil `--profil streng` sperrt zusätzlich WebFetch, WebSearch, curl, wget, nc, scp und ssh. Das CLI braucht Python 3.10 oder neuer und nur die Standardbibliothek.

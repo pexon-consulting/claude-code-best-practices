@@ -2,7 +2,9 @@
 
 Vorlage für einen Pilot mit 15-20 Entwicklern über 4-8 Wochen. Sie legt Ziele, Teilnehmer, Messgrößen und Abbruchkriterien vorab fest, damit die Entscheidung nach dem Pilot auf Zahlen beruht.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Unterlage erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 | Feld | Eintrag |
 | --- | --- |

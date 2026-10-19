@@ -2,7 +2,7 @@
 
 Dieses Claude Code Tutorial führt dich in etwa einer Stunde von der Installation bis zum ersten eigenen Commit: installieren, im Projekt starten, mit `/init` eine CLAUDE.md anlegen, eine erste kleine Aufgabe lösen, eine größere im Plan Mode planen, Tests laufen lassen und committen. Du brauchst ein Git-Projekt, ein Terminal und ein Konto für Claude Code, also ein Abo, einen Zugang über die Claude Console oder einen Cloud-Anbieter. Claude Code versteht deutsche Prompts, alle Beispiele hier sind auf Deutsch.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -149,7 +149,7 @@ Committe die Änderungen mit einer aussagekräftigen Nachricht auf Deutsch.
 
 Danach `/clear`, bevor du mit der nächsten Aufgabe beginnst.
 
-## Beispiele
+## Beispiele für die erste Stunde
 
 ### Beispiel 1: Fehler über ein Log beheben
 

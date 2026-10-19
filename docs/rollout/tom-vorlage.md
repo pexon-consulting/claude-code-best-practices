@@ -2,7 +2,7 @@
 
 Vorlage für die technischen und organisatorischen Maßnahmen (TOM) beim Einsatz von Claude Code. Die Gliederung folgt den Punkten aus Art. 32 Abs. 1 DSGVO. Die Maßnahmen, die Claude Code und die Team-Basis dieses Repos technisch liefern, sind bereits eingetragen; unternehmensspezifische Maßnahmen stehen als Platzhalter.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 Diese Vorlage ist keine Rechtsberatung. Ob die Maßnahmen ein angemessenes Schutzniveau ergeben, bewertet der Datenschutzbeauftragte. Die TOM des Modellanbieters selbst ([Anthropic / AWS / Google / Microsoft]) sind nicht Teil dieser Vorlage; sie stammen aus dessen Vertragsunterlagen, bei Anthropic aus dem [Trust Center](https://trust.anthropic.com).
 
@@ -24,7 +24,7 @@ Diese Vorlage ist keine Rechtsberatung. Ob die Maßnahmen ein angemessenes Schut
 | Verschlüsselung der Endgeräte | [Festplattenverschlüsselung, z.B. FileVault, BitLocker, LUKS] | [Status] |
 | Keine Echtdaten in Prompts | Regel in Organisations-CLAUDE.md (`claudeMd`) und Schulung | [Status] |
 | Synthetische oder pseudonymisierte Testdaten | [Vorgabe für Testdaten, Ablage unter `tests/fixtures/`] | [Status] |
-| Blockieren personenbezogener Daten | Hook `pii_schutz.py`: IBAN, Steuer-ID, SV-Nummer, Kreditkarte mit Prüfziffer werden vor dem Senden an das Modell geblockt; viele E-Mails oder Telefonnummern führen zu einer Rückfrage | umgesetzt in [Repos] |
+| Blockieren personenbezogener Daten | Hook `pii_schutz.py`: IBAN, Steuer-ID, SV-Nummer, Kreditkarte mit Prüfziffer werden in Prompts, Befehlen und geschriebenem Code geblockt, nicht in gelesenen Dateien; viele E-Mails oder Telefonnummern führen zu einer Rückfrage. Datenordner zusätzlich per deny-Regel sperren | umgesetzt in [Repos] |
 
 ## 2. Vertraulichkeit
 
@@ -64,7 +64,7 @@ Diese Vorlage ist keine Rechtsberatung. Ob die Maßnahmen ein angemessenes Schut
 | Schutz vor zerstörerischen Befehlen | Hook `befehle_schutz.py` sperrt u.a. `rm -rf` auf `/`, `~`, `.`, `git push --force`, `--no-verify`, `curl ... \| sh` | umgesetzt in [Repos] |
 | Review aller Änderungen | Pull-Request-Pflicht, `/security-review` vor dem Merge | [Status] |
 | Prüfung der Konfiguration | `claude-team audit` in CI mit Exit-Code | [Status] |
-| Nachvollziehbarkeit | Hook `protokoll.py`: Zeit, Sitzung (8 Zeichen), Tool, Datei, Befehl mit maskierten Tokens, Dauer; keine Dateiinhalte | [Status] |
+| Nachvollziehbarkeit | Hook `protokoll.py` (standardmäßig aus): Zeit, Sitzung (8 Zeichen), Tool, Datei, Befehl mit maskierten Tokens und Kennungen, Dauer; keine Dateiinhalte | [Status] |
 | Plugins nur aus freigegebenen Quellen | `strictKnownMarketplaces` | umgesetzt |
 | Organisationsweite Hooks erzwingen | [`allowManagedHooksOnly` mit erzwungenem Plugin] | [Status] |
 
@@ -86,7 +86,7 @@ Diese Vorlage ist keine Rechtsberatung. Ob die Maßnahmen ein angemessenes Schut
 | Lokale Transkripte | `cleanupPeriodDays: [x]` in den Managed Settings | umgesetzt |
 | Kein Feedback-Upload (5 Jahre Aufbewahrung) | `DISABLE_FEEDBACK_COMMAND=1` | umgesetzt |
 | Keine Telemetrie an Anthropic | `DISABLE_TELEMETRY=1`, `DISABLE_ERROR_REPORTING=1`, `CLAUDE_CODE_DISABLE_FEEDBACK_SURVEY=1` | umgesetzt |
-| Hook-Protokolle | Ordner `.claude/protokoll/`, nicht im Git; Löschfrist [x] Tage | [Status] |
+| Hook-Protokolle | Ordner `.claude/protokoll/`, nicht im Git; Löschfrist [x] Tage über `protokoll.aufbewahrung_tage` (Standard 30) | [Status] |
 
 ## 6. Organisatorische Maßnahmen
 

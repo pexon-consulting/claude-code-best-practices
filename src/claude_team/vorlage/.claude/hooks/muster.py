@@ -19,6 +19,7 @@ class Fund:
     klasse: str  # "secret" oder "pii"
     stelle: int  # Zeichenposition im Text
     vorschau: str  # maskiert, nie der volle Wert
+    laenge: int = 0  # Zeichen ab stelle, die zum Treffer gehören
 
 
 def maskiere(wert: str) -> str:
@@ -58,7 +59,7 @@ def finde_secrets(text: str) -> list[Fund]:
                 continue
             if art not in ("privater-schluessel",) and _PLATZHALTER.search(wert):
                 continue
-            funde.append(Fund(art, "secret", m.start(), maskiere(wert)))
+            funde.append(Fund(art, "secret", m.start(), maskiere(wert), len(wert)))
     return funde
 
 
@@ -67,7 +68,7 @@ def finde_secrets(text: str) -> list[Fund]:
 SENSIBLE_DATEIEN = (
     ".env", ".env.*", "*.pem", "*.key", "*.p12", "*.pfx", "*.jks", "*.keystore",
     "id_rsa", "id_rsa.*", "id_ed25519", "id_ed25519.*", "id_ecdsa", "id_ecdsa.*",
-    ".netrc", ".npmrc", ".pypirc", "credentials", "credentials.json", "*.tfstate", "*.tfstate.*",
+    ".netrc", ".npmrc", ".pypirc", "credentials", "credentials.json", ".credentials.json", "*.tfstate", "*.tfstate.*",
     "secrets.*", "*.secrets.*",
 )
 SENSIBLE_ORDNER = ("secrets", ".aws", ".ssh", ".gnupg", ".kube", ".azure", ".config/gcloud", ".docker")
@@ -90,7 +91,7 @@ def ist_sensibler_pfad(pfad: str) -> bool:
 
 # --- Personenbezogene Daten -------------------------------------------------
 
-_IBAN = re.compile(r"\b([A-Z]{2}\d{2}(?: ?[A-Z0-9]{4}){2,7}(?: ?[A-Z0-9]{1,4})?)\b")
+_IBAN = re.compile(r"(?i)\b([A-Z]{2}\d{2}(?:[ -]?[A-Z0-9]{4}){2,7}(?:[ -]?[A-Z0-9]{1,4})?)\b")
 _IBAN_LAENGE = {"DE": 22, "AT": 20, "CH": 21, "LI": 21, "LU": 20, "NL": 18, "BE": 16, "FR": 27, "IT": 27, "ES": 24, "PL": 28, "DK": 18}
 _ELF_ZIFFERN = re.compile(r"(?<!\d)(?<!\d[.,])(\d{2} ?\d{3} ?\d{3} ?\d{3})(?!\d|[.,]\d)")
 _UST_ID = re.compile(r"\b(DE ?\d{3} ?\d{3} ?\d{3})\b")
@@ -101,10 +102,12 @@ _TELEFON = re.compile(r"(?<![\w+])(?:\+49|0049|0)[ /-]?(?:\(0\))?[ /-]?[1-9]\d{1
 _EMAIL_HARMLOS = re.compile(r"(?i)@(example\.(com|org|net|de)|beispiel\.de|test\.de|localhost|users\.noreply\.github\.com)$|^(noreply|no-reply|info|kontakt|support|hello|team)@")
 
 
-# Öffentlich dokumentierte Testwerte (Bundesbank-Beispiel, Kartennetz-Testnummern). Dürfen in Tests stehen.
+# Verbreitete Beispielwerte aus Dokumentationen und Testumgebungen von Zahlungsanbietern
+# (Beispiel-IBANs, Testkartennummern). Dürfen in Tests stehen.
 TESTWERTE = frozenset({
     "DE89370400440532013000", "DE02120300000000202051", "DE02500105170137075030", "DE75512108001245126199",
-    "4111111111111111", "4242424242424242", "5555555555554444", "5105105105105100", "378282246310005", "4000056655665556",
+    "4111111111111111", "4242424242424242", "4012888888881881", "5555555555554444", "5105105105105100",
+    "2223003122003222", "378282246310005", "4000056655665556",
 })
 
 
@@ -113,12 +116,15 @@ def ist_testwert(text: str) -> bool:
 
 
 def iban_gueltig(text: str) -> bool:
-    s = text.replace(" ", "").upper()
+    roh = re.sub(r"[ -]", "", text)
+    s = roh.upper()
     if not re.fullmatch(r"[A-Z]{2}\d{2}[A-Z0-9]{11,30}", s):
         return False
     laenge = _IBAN_LAENGE.get(s[:2])
     if laenge and len(s) != laenge:
         return False
+    if roh != s and not laenge:
+        return False  # klein geschrieben nur für Länder mit fester Länge, sonst zu viele Zufallstreffer
     umgestellt = s[4:] + s[:4]
     zahl = "".join(str(int(z, 36)) for z in umgestellt)
     return int(zahl) % 97 == 1
@@ -184,7 +190,7 @@ def finde_pii(text: str) -> list[Fund]:
     for art, regex, gueltig in pruefungen:
         for m in regex.finditer(text):
             if gueltig(m) and not ist_testwert(m.group(0)):
-                funde.append(Fund(art, "pii", m.start(), maskiere(m.group(0))))
+                funde.append(Fund(art, "pii", m.start(), maskiere(m.group(0)), len(m.group(0))))
     return funde
 
 

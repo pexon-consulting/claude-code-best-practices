@@ -1,11 +1,11 @@
-# Claude Code Best Practices: Vorlagen und Anleitungen für Teams (Deutsch)
+# Claude Code Best Practices: Vorlagen und Anleitungen für Teams (Deutsch, inoffiziell)
 
-Dieses Repo sammelt Claude Code Best Practices auf Deutsch: 35 Anleitungen zu CLAUDE.md, settings.json, Permissions, Hooks, Skills, Subagents, Plugins, MCP, DSGVO, Bedrock und Kosten, dazu fertige Vorlagen und das Werkzeug `claude-team`, das ein Repo in einem Befehl einrichtet und in CI prüft. Es richtet sich an Entwicklerteams und Plattform-Teams, die Claude Code einheitlich und sicher einsetzen wollen. Die mitgelieferten Hooks blockieren Secrets und deutsche personenbezogene Daten (IBAN, Steuer-ID, Sozialversicherungsnummer) mit echter Prüfziffernprüfung, bevor sie im Kontext des Modells landen.
+Claude Code Best Practices auf Deutsch: 35 Anleitungen zu CLAUDE.md, settings.json, Permissions, Hooks, Skills, Subagents, Plugins, MCP, DSGVO, Bedrock und Kosten, dazu fertige Vorlagen und das Werkzeug `claude-team`, das ein Repo in einem Befehl einrichtet und in CI prüft. Es richtet sich an Entwicklerteams und Plattform-Teams, die Claude Code einheitlich und sicher einsetzen wollen. Die mitgelieferten Hooks erkennen Secrets und deutsche Kennungen (IBAN, Steuer-ID, Sozialversicherungsnummer) mit echter Prüfziffernprüfung, wenn sie in einem Prompt, einem Shell-Befehl oder in neu geschriebenem Code auftauchen. Was Claude Code aus vorhandenen Dateien liest, prüfen sie nicht; dafür sind deny-Regeln für Datenordner zuständig.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. MIT-Lizenz. [English summary below](#english).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. MIT-Lizenz. Inoffizielles Projekt, nicht mit Anthropic verbunden. [English summary below](#english).
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten .
 ```
 
 ## Inhalt
@@ -57,19 +57,19 @@ Du brauchst Python 3.10 oder neuer. Mit [uv](https://docs.astral.sh/uv/) geht es
 
 ```bash
 # Repo prüfen
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .
 
 # erst ansehen, was angelegt würde
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run
 
 # einrichten
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten .
 ```
 
 Oder dauerhaft mit pip:
 
 ```bash
-pip install git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0
+pip install git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0
 claude-team einrichten .
 claude-team audit .
 ```
@@ -89,7 +89,7 @@ CLAUDE.md                      Projektwissen mit erkannten Befehlen
 .mcp.json.example              MCP-Vorlage mit ${VARIABLEN}
 ```
 
-Als Plugin für alle eigenen Projekte, ohne Dateien im Repo:
+Als Plugin für alle eigenen Projekte, ohne Dateien im Repo. Plugins führen Hooks auf deinem Rechner aus. Für Teams empfiehlt sich, das Repo zu forken und den eigenen Fork als Marketplace einzutragen oder auf einen Tag zu pinnen (`pexon-consulting/claude-code-best-practices@v0.2.0`) und Änderungen vor jedem Update zu prüfen:
 
 ```bash
 claude plugin marketplace add pexon-consulting/claude-code-best-practices
@@ -164,7 +164,7 @@ Die `.claude/settings.json` legt fest, was Claude ohne Rückfrage darf. Geprüft
   "permissions": {
     "defaultMode": "default",
     "disableBypassPermissionsMode": "disable",
-    "allow": ["Bash(git status *)", "Bash(git diff *)", "Bash(pytest *)"],
+    "allow": ["Bash(git status *)", "Bash(git diff *)", "Bash(ruff check *)"],
     "ask": ["Bash(git push *)", "Bash(terraform apply *)", "WebFetch"],
     "deny": [
       "Read(.env)",
@@ -182,6 +182,8 @@ Die `.claude/settings.json` legt fest, was Claude ohne Rückfrage darf. Geprüft
 }
 ```
 
+Testbefehle wie `pytest` oder `npm run test` stehen bewusst nicht in der allow-Liste der Vorlage. Sie führen Code aus dem Repo aus (`conftest.py`, Skripte aus `package.json`), auch Code, den Claude kurz vorher geändert hat. Nimm sie nur auf, wenn Änderungen an diesen Dateien weiter einzeln bestätigt werden.
+
 Drei Fallen, die das Audit erkennt:
 
 - `Write(.env)` als deny-Regel wird nie geprüft. Pfadregeln wirken für `Read` und `Edit`, eine Read-Sperre blockiert auch Schreiben ([CC017](docs/regeln.md#cc017)).
@@ -196,16 +198,16 @@ Drei Fallen, die das Audit erkennt:
 
 ## Claude Code Hooks gegen Secrets und personenbezogene Daten
 
-Deny-Regeln greifen nur, wenn das Muster passt. `cat .env` erkennt Claude Code, `grep DATABASE config/.env.production | head -1` oder `env | sort` nicht zuverlässig. Deshalb liefert die Vorlage sieben Hooks in reinem Python, ohne Abhängigkeiten:
+Deny-Regeln greifen nur, wenn das Muster passt. `cat .env` erkennt Claude Code, `grep DATABASE config/.env.production | head -1` oder `env | sort` nicht zuverlässig. Deshalb liefert die Vorlage sieben Hooks in reinem Python, ohne Abhängigkeiten. Sie prüfen, was Claude Code tun will: Prompts, Shell-Befehle, Dateipfade und neu geschriebenen Code. Was ein Tool zurückgibt, also den Inhalt gelesener Dateien, prüfen sie nicht:
 
 | Hook | Ereignis | Was er tut |
 | --- | --- | --- |
-| `secrets_schutz.py` | PreToolUse | sperrt `.env`, Schlüssel und Cloud-Credentials für Read, Edit, Grep und jeden Lesebefehl in Bash und PowerShell, blockt `env`, `printenv` und `Get-ChildItem env:`, erkennt im neuen Code Tokens von GitHub, GitLab, AWS, Anthropic, OpenAI, Google, Slack, Stripe und Azure, private Schlüssel, JWTs und URLs mit Passwort |
-| `pii_schutz.py` | PreToolUse, UserPromptSubmit | erkennt IBAN, Steuer-ID, Sozialversicherungsnummer, Kreditkarten (Luhn) und USt-IdNr. mit echter Prüfziffernprüfung, lässt die Muster-IBAN der Bundesbank und bekannte Testkarten durch, fragt bei eingefügten Kundenlisten nach |
-| `befehle_schutz.py` | PreToolUse | blockt `rm -rf` und `Remove-Item -Recurse` auf Home, Wurzel oder Arbeitsordner, Force-Push und `curl \| sh` oder `irm \| iex`, auch hinter `cd` oder `&&`; fragt bei `sudo` nach und bei Befehlen aus `befehle.fragen_bei` immer |
-| `stopp_tests.py` | Stop | lässt Claude erst fertig melden, wenn der Testbefehl grün ist, mit Schleifenschutz |
+| `secrets_schutz.py` | PreToolUse | sperrt `.env`, Schlüssel und Cloud-Credentials für Read, Edit und Grep; blockt Bash- und PowerShell-Befehle, die solche Pfade nennen (auch in `python -c` oder `node -e`), Platzhalter wie `cat .e*v`, die eine solche Datei treffen, und `grep -r` über Ordner mit `.env`; blockt `env`, `printenv`, `export`, `declare -x` und `Get-ChildItem env:`; erkennt im neuen Code Tokens von GitHub, GitLab, AWS, Anthropic, OpenAI, Google, Slack, Stripe und Azure, private Schlüssel, JWTs und URLs mit Passwort. Pfade, die erst zur Laufzeit entstehen, erkennt er nicht |
+| `pii_schutz.py` | PreToolUse, UserPromptSubmit | erkennt IBAN, Steuer-ID, Sozialversicherungsnummer, Kreditkarten (Luhn) und USt-IdNr. mit echter Prüfziffernprüfung in Prompts, Shell-Befehlen und neu geschriebenem Code, nicht in gelesenen Dateien; lässt verbreitete Beispiel-IBANs und bekannte Testkarten durch, fragt bei eingefügten Kundenlisten nach. Namen, Anschriften und Gesundheitsdaten erkennt er nicht |
+| `befehle_schutz.py` | PreToolUse | blockt `rm -rf` und `Remove-Item -Recurse` auf Home, Wurzel oder Arbeitsordner, Force-Push (auch `git -C . push -f` und `+branch`) und `curl \| sh`, `bash <(curl ...)` oder `irm \| iex`, auch hinter `cd`, `&&` oder in `bash -c`; fragt bei `sudo` nach und bei Befehlen aus `befehle.fragen_bei` immer |
+| `stopp_tests.py` | Stop | lässt Claude erst fertig melden, wenn der Testbefehl grün ist, mit Schleifenschutz; aktiv, sobald `stopp.befehl` in `schutz.json` gesetzt ist (nach `einrichten` leer) |
 | `sitzungsstart.py` | SessionStart | gibt Branch, offene Änderungen und letzte Commits als Kontext mit, warnt auf dem Hauptbranch |
-| `protokoll.py` | PostToolUse | schreibt eine Zeile je Tool-Aufruf nach `.claude/protokoll/`, ohne Dateiinhalte, Tokens maskiert |
+| `protokoll.py` | PostToolUse | standardmäßig aus; eingeschaltet schreibt er eine Zeile je Tool-Aufruf nach `.claude/protokoll/`, ohne Dateiinhalte, Tokens, Kennungen und E-Mail-Adressen maskiert, und löscht Dateien nach `aufbewahrung_tage` (Standard 30). Vor dem Einschalten im Team Betriebsrat und Datenschutz einbinden |
 | `format_nach_edit.py` | PostToolUse | formatiert geänderte Dateien mit ruff oder black, prettier, gofmt, rustfmt oder terraform fmt, wenn vorhanden |
 
 So sieht ein Treffer aus. Claude will eine IBAN mit gültiger Prüfziffer in eine Seed-Datei schreiben, der Hook antwortet:
@@ -215,12 +217,14 @@ So sieht ein Treffer aus. Claude will eine IBAN mit gültiger Prüfziffer in ein
   "hookSpecificOutput": {
     "hookEventName": "PreToolUse",
     "permissionDecision": "deny",
-    "permissionDecisionReason": "Personenbezogene Daten gefunden: IBAN DE27****************78. Durch Testdaten ersetzen (z.B. die Muster-IBAN DE89 3704 0044 0532 0130 00)."
+    "permissionDecisionReason": "Personenbezogene Daten gefunden: IBAN DE27****************78. Durch Testdaten ersetzen (z.B. die verbreitete Beispiel-IBAN DE89 3704 0044 0532 0130 00)."
   }
 }
 ```
 
 Die Prüfziffer macht den Unterschied: Eine zufällige 22-stellige Zahl mit `DE` davor löst nichts aus, eine echte IBAN schon. Das hält die Fehlalarme niedrig. Einstellbar ist alles in `.claude/schutz.json`, zum Beispiel `"modus": "ask"` statt `"deny"` oder Ausnahmen für `tests/fixtures/**`. Bei kaputter Eingabe lassen die Hooks durch, statt die Sitzung zu blockieren.
+
+Hooks sind eine zusätzliche Sicherung, keine Garantie. Sie sehen nicht, was Claude Code aus Dateien liest, erkennen nur Kennungen mit Prüfziffer und lassen sich mit Umwegen umgehen. Was sie nicht abdecken, steht in der [Hooks-Anleitung](docs/anleitungen/claude-code-hooks.md#was-die-hooks-nicht-abdecken). Datenordner sperrst du zusätzlich mit deny-Regeln.
 
 Hooks testest du ohne Claude, indem du das JSON per Pipe übergibst:
 
@@ -250,7 +254,7 @@ Dieses Repo ist selbst ein Plugin-Marketplace und enthält vier Skills: `claude-
 - [Claude Code Subagents: eigene Agenten definieren und richtig delegieren](docs/anleitungen/claude-code-subagents.md)
 - [Claude Code Plugins: Marketplace einrichten und Plugins im Team verteilen](docs/anleitungen/claude-code-plugins.md)
 - [Claude Code Agent Teams: mehrere Agenten parallel koordinieren](docs/anleitungen/claude-code-agent-teams.md)
-- [Claude Code Befehle: Slash Commands, CLI-Flags und Shortcuts als Cheat Sheet](docs/anleitungen/claude-code-befehle.md)
+- [Claude Code Befehle: alle Slash Commands, CLI-Flags und Tastenkürzel erklärt](docs/anleitungen/claude-code-befehle.md)
 - [Claude Code Statusline: Modell, Kontext und Kosten in der Statuszeile anzeigen](docs/anleitungen/claude-code-statusline.md)
 
 ## MCP-Server in Claude Code einbinden
@@ -292,7 +296,7 @@ Für den Weg durch IT-Sicherheit, Datenschutz und Betriebsrat liegen unter [`doc
 
 | Vorlage | Für wen |
 | --- | --- |
-| [Pilotplan](docs/rollout/pilotplan.md) | Teamleitung: sechs Wochen Pilot mit Messgrößen und Abbruchkriterien |
+| [Pilotplan](docs/rollout/pilotplan.md) | Teamleitung: Pilot über 4-8 Wochen mit Messgrößen und Abbruchkriterien |
 | [Freigabe-Paket](docs/rollout/freigabe-paket.md) | IT-Sicherheit: Datenflüsse, Einstellungen, Restrisiken |
 | [TOM-Vorlage](docs/rollout/tom-vorlage.md) | Datenschutz: technische und organisatorische Maßnahmen |
 | [DSFA-Vorlage](docs/rollout/dsfa-vorlage.md) | Datenschutz: Datenschutz-Folgenabschätzung |
@@ -306,9 +310,9 @@ Für den Weg durch IT-Sicherheit, Datenschutz und Betriebsrat liegen unter [`doc
 
 ## Claude Code und DSGVO: Datenschutz im Unternehmen
 
-Claude Code lässt sich DSGVO-konform einsetzen, wenn drei Dinge zusammenkommen: ein kommerzieller Vertrag (Team, Enterprise, API oder ein Cloud-Anbieter wie Amazon Bedrock) mit Auftragsverarbeitungsvertrag, eine bewusst gewählte Region und Einstellungen, die Telemetrie, Feedback-Uploads und personenbezogene Daten im Prompt begrenzen. Alles, was Claude liest oder du eingibst, geht als Prompt an das Modell. Die Betriebsvariante entscheidet, wer die Daten verarbeitet und wie lange sie gespeichert werden.
+Für einen datenschutzkonformen Einsatz von Claude Code im Unternehmen braucht es mindestens drei Dinge: einen kommerziellen Vertrag (Team, Enterprise, API oder einen Cloud-Anbieter wie Amazon Bedrock) mit geklärtem Auftragsverarbeitungsvertrag und Drittlandtransfer, eine bewusst gewählte Region und Einstellungen, die Telemetrie, Feedback-Uploads und personenbezogene Daten im Prompt begrenzen. Ob das im Einzelfall reicht, bewerten Datenschutzbeauftragter und Rechtsabteilung. Alles, was Claude liest oder du eingibst, geht als Prompt an das Modell. Die Betriebsvariante entscheidet, wer die Daten verarbeitet und wie lange sie gespeichert werden.
 
-Technisch hilft dieses Repo an drei Stellen: `DISABLE_TELEMETRY` und `DISABLE_ERROR_REPORTING` im `env`-Block, `cleanupPeriodDays` für lokale Verläufe und der PII-Hook, der IBAN, Steuer-ID und Sozialversicherungsnummer stoppt, bevor sie im Prompt landen. Die rechtliche Bewertung bleibt Sache deines Datenschutzbeauftragten. Die Anleitung ist keine Rechtsberatung.
+Technisch hilft dieses Repo an drei Stellen: `DISABLE_TELEMETRY` und `DISABLE_ERROR_REPORTING` im `env`-Block, `cleanupPeriodDays` für lokale Verläufe und der PII-Hook, der IBAN, Steuer-ID und Sozialversicherungsnummer in Eingaben, Shell-Befehlen und Schreibaktionen blockt (nicht beim Lesen von Dateien). Die rechtliche Bewertung bleibt Sache deines Datenschutzbeauftragten. Die Anleitung ist keine Rechtsberatung.
 
 - [Claude Code DSGVO: datenschutzkonform im Unternehmen einsetzen](docs/anleitungen/claude-code-dsgvo.md)
 - [Datenschutzhinweis zu diesem Repo und dem Werkzeug](PRIVACY.md)
@@ -332,7 +336,7 @@ export CLAUDE_CODE_USE_FOUNDRY=1
 export ANTHROPIC_FOUNDRY_RESOURCE=meine-ressource
 ```
 
-In jedem Fall gilt: Modellversionen pinnen und die Variablen zentral über Managed Settings verteilen, nicht über persönliche Shell-Profile.
+In jedem Fall gilt: Modellversionen pinnen und die Variablen zentral über Managed Settings verteilen, nicht über persönliche Shell-Profile. Bei Bedrock garantiert die Region allein keine Verarbeitung in der EU: Der Präfix `eu` ist laut Doku nur eine Präferenz. Belastbar wird es erst mit fest gepinnten `eu.`-Modell-IDs und einer IAM-Policy, die nur EU-Regionen freigibt (siehe Bedrock-Anleitung).
 
 - [Claude Code Bedrock: Claude Code über Amazon Bedrock in der EU betreiben](docs/anleitungen/claude-code-bedrock.md)
 - [Claude Code Vertex AI: Claude Code über Google Cloud betreiben](docs/anleitungen/claude-code-vertex-ai.md)
@@ -354,7 +358,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: pexon-consulting/claude-code-best-practices@v0.1.0
+      - uses: pexon-consulting/claude-code-best-practices@v0.2.0
         with:
           schwelle: warnung
           sarif: true
@@ -452,7 +456,7 @@ Mit `--profil streng` sperrt die settings.json zusätzlich `WebFetch`, `WebSearc
 
 | Befehl | Was er tut |
 | --- | --- |
-| `claude-team audit [pfad]` | prüft CLAUDE.md, Settings, Hooks, MCP, Subagents, Skills und Git gegen 35 Regeln |
+| `claude-team audit [pfad]` | prüft CLAUDE.md, Settings, Hooks, MCP, Subagents, Skills und Git gegen 36 Regeln |
 | `claude-team einrichten [pfad]` | legt die Vorlagen an, ohne zu überschreiben |
 | `claude-team scannen [pfad\|-]` | durchsucht alle Dateien, die Git kennt, oder stdin nach Secrets und personenbezogenen Daten |
 | `claude-team regeln` | listet alle Regeln mit Schwere |
@@ -470,7 +474,7 @@ claude-team einrichten . --profil streng        # zusätzlich Web und Netz sperr
 echo "Text" | claude-team scannen -             # stdin prüfen, z.B. im pre-commit-Hook
 ```
 
-Die 35 Regeln (16 Fehler, 12 Warnungen, 7 Hinweise) sind in [docs/regeln.md](docs/regeln.md) einzeln erklärt, jede mit Begründung, Beispiel und Lösung. Ein typischer Bericht:
+Die 36 Regeln (16 Fehler, 12 Warnungen, 8 Hinweise) sind in [docs/regeln.md](docs/regeln.md) einzeln erklärt, jede mit Begründung, Beispiel und Lösung. Ein typischer Bericht:
 
 ```text
 FEHLER  CC012 .claude/settings.json
@@ -513,11 +517,11 @@ Mit `claude mcp add`, zum Beispiel `claude mcp add --transport http sentry https
 
 ### Wie verhindere ich, dass Claude Code .env-Dateien und Secrets liest?
 
-Mit zwei Schichten: deny-Regeln wie `Read(.env)` und `Read(.env.*)` in der `.claude/settings.json` und einem `PreToolUse`-Hook, der auch Umwege wie `grep` in einer Bash-Kette oder `printenv` blockt. Beides legt `claude-team einrichten .` an. Siehe [Hooks-Anleitung](docs/anleitungen/claude-code-hooks.md) und [Beispiele](docs/beispiele.md#beispiel-13).
+Mit zwei Schichten: deny-Regeln wie `Read(.env)` und `Read(.env.*)` in der `.claude/settings.json` und einem `PreToolUse`-Hook, der auch gängige Umwege wie `grep` in einer Bash-Kette, `python -c` oder `printenv` blockt. Pfade, die erst zur Laufzeit entstehen, erkennt kein Hook; deshalb bleibt die Rückfrage von Claude Code für unbekannte Befehle an. Beides legt `claude-team einrichten .` an. Siehe [Hooks-Anleitung](docs/anleitungen/claude-code-hooks.md) und [Beispiele](docs/beispiele.md#beispiel-13).
 
 ### Ist Claude DSGVO-konform nutzbar?
 
-Ja, wenn ein kommerzieller Vertrag mit Auftragsverarbeitungsvertrag besteht, die Region bewusst gewählt ist und Telemetrie sowie personenbezogene Daten im Prompt technisch begrenzt sind. Die kostenlosen Verbraucher-Pläne sind für Unternehmensdaten nicht gedacht. Die Bewertung im Einzelfall trifft dein Datenschutzbeauftragter. Siehe [DSGVO-Anleitung](docs/anleitungen/claude-code-dsgvo.md).
+Das lässt sich nicht pauschal mit Ja beantworten. Voraussetzungen sind mindestens ein kommerzieller Vertrag mit Auftragsverarbeitungsvertrag, ein geklärter Drittlandtransfer, eine bewusst gewählte Region und technische Begrenzung von Telemetrie und personenbezogenen Daten. Ob der Einsatz in deinem Unternehmen zulässig ist, bewertet dein Datenschutzbeauftragter. Free, Pro und Max sind Verbraucher-Pläne unter den Consumer Terms und für Unternehmensdaten nicht gedacht. Siehe [DSGVO-Anleitung](docs/anleitungen/claude-code-dsgvo.md).
 
 ### Was macht --dangerously-skip-permissions?
 
@@ -538,19 +542,23 @@ Ein Skill ist eine Anleitung, die im Kontext der laufenden Sitzung arbeitet. Ein
 <a id="english"></a>
 ## Claude Code Best Practices in English
 
+Unofficial. Claude and Claude Code are trademarks of Anthropic PBC. This project is not affiliated with Anthropic.
+
 This repository collects Claude Code best practices for teams, written in German, with ready-to-use templates and a CLI. It covers CLAUDE.md, AGENTS.md, settings.json and permissions, hooks, skills, subagents, plugins, MCP servers, GitHub Actions code review, Amazon Bedrock, Google Vertex AI, Microsoft Foundry, GDPR, costs and token usage.
 
 What makes it different from other Claude Code best practice collections:
 
-- **Hooks that block secrets and German personal data.** `PreToolUse` and `UserPromptSubmit` hooks detect IBANs, German tax IDs, social security numbers, VAT IDs and credit cards with real checksum validation, plus tokens from GitHub, AWS, Anthropic, OpenAI, Slack and Stripe. They also catch indirect reads like `grep KEY config/.env.production | head` and `env | sort`, which permission rules miss.
-- **A linter for Claude Code configuration.** `claude-team audit` checks 35 rules, for example deny rules that never fire (`Write(.env)`), wildcards that allow any subcommand (`Bash(git * main)`), relative hook paths, plaintext MCP tokens, unpinned MCP servers and HTTP servers missing `"type"`. Output as text, Markdown, JSON or SARIF.
+- **Hooks that flag secrets and German identifiers in prompts, shell commands and written code.** `PreToolUse` and `UserPromptSubmit` hooks detect IBANs, German tax IDs, social security numbers, VAT IDs and credit cards with real checksum validation, plus tokens from GitHub, AWS, Anthropic, OpenAI, Slack and Stripe. They also catch common indirect reads like `grep KEY config/.env.production | head`, `python -c "open('.env')"` and `env | sort`, which permission rules miss. They do not scan the content of files Claude reads; use deny rules for data folders.
+- **A linter for Claude Code configuration.** `claude-team audit` checks 36 rules, for example deny rules that never fire (`Write(.env)`), wildcards that allow any subcommand (`Bash(git * main)`), relative hook paths, plaintext MCP tokens, unpinned MCP servers and HTTP servers missing `"type"`. Output as text, Markdown, JSON or SARIF.
 - **A GitHub Action** that uploads findings to GitHub Code Scanning.
 - **A Claude Code plugin** (`team-basis`) and skills for skills.sh.
 - **Rollout templates** for security approval, GDPR documentation (TOM, DPIA), works council and cost policy, plus a managed-settings.json.
 
+Key guides (German): [CLAUDE.md](docs/anleitungen/claude-md.md), [settings.json and permissions](docs/anleitungen/claude-code-permissions.md), [hooks](docs/anleitungen/claude-code-hooks.md), [MCP](docs/anleitungen/claude-code-mcp.md), [GDPR](docs/anleitungen/claude-code-dsgvo.md), [Amazon Bedrock in the EU](docs/anleitungen/claude-code-bedrock.md), [costs](docs/anleitungen/claude-code-kosten.md). The guides explain technology and settings; they are not legal advice.
+
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit .
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten .
 
 claude plugin marketplace add pexon-consulting/claude-code-best-practices
 claude plugin install team-basis@claude-code-best-practices
@@ -571,6 +579,6 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 
 Lizenz: [MIT](LICENSE). Zitieren: [CITATION.cff](CITATION.cff). Änderungen: [CHANGELOG.md](CHANGELOG.md).
 
-Claude und Claude Code sind Marken von Anthropic. Dieses Repo ist ein unabhängiges Community-Projekt und nicht mit Anthropic verbunden.
+Claude und Claude Code sind Marken von Anthropic PBC. Dieses Repo ist ein unabhängiges, inoffizielles Community-Projekt und nicht mit Anthropic verbunden. Die Anleitungen beschreiben Technik und Einstellungen nach bestem Wissen; sie sind keine Rechtsberatung. Die Autoren übernehmen keine Gewähr für Vollständigkeit und Aktualität, maßgeblich sind die aktuelle Dokumentation und die Verträge der Anbieter.
 
 Gepflegt von Pexon Consulting. Wer Claude Code im Team einführt, findet bei uns eine [Claude-Code-Schulung zu Agentic Coding](https://pexon-consulting.de/schulungen/claude-code-schulung-agentic-coding).

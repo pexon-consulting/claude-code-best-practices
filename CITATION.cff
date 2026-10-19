@@ -9,8 +9,8 @@ authors:
     given-names: "Phillip"
 repository-code: "https://github.com/pexon-consulting/claude-code-best-practices"
 license: MIT
-version: 0.1.0
-date-released: 2026-10-15
+version: 0.2.0
+date-released: 2026-10-19
 keywords:
   - claude-code
   - claude-md

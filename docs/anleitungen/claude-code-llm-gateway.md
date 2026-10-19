@@ -2,7 +2,9 @@
 
 Claude Code leitest du über ein firmeneigenes LLM-Gateway, indem du `ANTHROPIC_BASE_URL` auf die Adresse des Gateways setzt und den Zugang des Gateways in `ANTHROPIC_AUTH_TOKEN` (Header `Authorization: Bearer`), `ANTHROPIC_API_KEY` (Header `x-api-key`) oder ein `apiKeyHelper`-Skript legst. Ob es klappt, prüfst du vorab mit einem `curl` auf `/v1/messages` und danach mit `/status`, wo die Zeile `Anthropic base URL` das Gateway zeigen muss. Für ein ganzes Team verteilst du beides über Managed Settings und sperrst mit `allowedProviders: ["customEndpoint"]` alle anderen Ziele.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -37,7 +39,7 @@ Ein Gateway ist Infrastruktur, die du selbst betreibst und aktuell halten musst:
 
 Was das Gateway speichert und wohin es weiterleitet, entscheidest du. Ob ein Gateway mit Protokollierung aller Prompts zu deinen Vorgaben passt, klärst du mit dem Datenschutzbeauftragten, siehe [Claude Code und DSGVO](./claude-code-dsgvo.md).
 
-## Beispiele
+## Beispiele für Proxy und LLM-Gateway
 
 ### Beispiel 1: Verbindung in der Shell testen
 
@@ -257,7 +259,7 @@ Das Gateway kann Nutzung je Person erfassen und Budgets sowie Rate Limits durchs
 ## Weiterlesen
 
 - [Claude Code und DSGVO](./claude-code-dsgvo.md)
-- [Claude Code Bedrock](./claude-code-bedrock.md), [Claude Code Vertex AI](./claude-code-vertex-ai.md) und [Claude Code Azure Foundry](./claude-code-azure-foundry.md)
+- [Claude Code Bedrock](./claude-code-bedrock.md), [Claude Code Vertex AI](./claude-code-vertex-ai.md) und [Claude Code mit Microsoft Foundry (Azure)](./claude-code-azure-foundry.md)
 - [Claude Code Enterprise: Managed Settings](./claude-code-enterprise.md)
 - [Claude Code Kosten](./claude-code-kosten.md)
 - [Claude Code Sicherheit](./claude-code-sicherheit.md)

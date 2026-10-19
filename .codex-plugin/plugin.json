@@ -1,7 +1,7 @@
 {
   "name": "team-basis",
   "description": "Claude Code Best Practices für Teams: Skills, die die Claude-Code-Konfiguration eines Repos prüfen, eine Team-Basis mit getesteten Hooks einrichten, eine gute CLAUDE.md schreiben und eigene Hooks bauen.",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "author": {
     "name": "Pexon Consulting GmbH",
     "url": "https://github.com/pexon-consulting"
@@ -13,7 +13,7 @@
   "interface": {
     "displayName": "Claude Code Team-Basis",
     "shortDescription": "Claude-Code-Konfiguration prüfen, für Teams einrichten, CLAUDE.md und Hooks schreiben",
-    "longDescription": "Vier Skills aus Claude Code Best Practices für Teams. claude-code-audit prüft CLAUDE.md, settings.json, Hooks, .mcp.json und .gitignore gegen 35 Regeln. claude-code-einrichten legt eine Team-Basis mit Hooks gegen Secrets und deutsche personenbezogene Daten an und überschreibt nie. claude-md-schreiben baut eine CLAUDE.md unter 200 Zeilen. hook-schreiben erstellt einen eigenen Hook samt Test.",
+    "longDescription": "Vier Skills aus Claude Code Best Practices für Teams. claude-code-audit prüft CLAUDE.md, settings.json, Hooks, .mcp.json und .gitignore gegen 36 Regeln. claude-code-einrichten legt eine Team-Basis mit Hooks gegen Secrets und deutsche personenbezogene Daten an und überschreibt nie. claude-md-schreiben baut eine CLAUDE.md unter 200 Zeilen. hook-schreiben erstellt einen eigenen Hook samt Test.",
     "developerName": "Pexon Consulting GmbH",
     "category": "Developer Tools",
     "capabilities": ["Read", "Write"],

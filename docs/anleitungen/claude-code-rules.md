@@ -2,7 +2,7 @@
 
 Claude Code Rules sind Markdown-Dateien im Ordner `.claude/rules/`, mit denen du Projektregeln auf mehrere Dateien aufteilst. Eine Regel ohne Frontmatter lädt bei jedem Start wie die CLAUDE.md. Eine Regel mit `paths`-Frontmatter lädt erst, wenn Claude eine passende Datei liest oder bearbeitet, und spart so Kontext. Damit bleibt die CLAUDE.md unter den empfohlenen 200 Zeilen, und Testregeln, API-Regeln oder Migrationsregeln stehen nur dann im Kontext, wenn sie gebraucht werden.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -119,7 +119,7 @@ Weitere Grenzen:
 - Wer Claude Code mit `--setting-sources` ohne `project` startet, bekommt keine Projektregeln.
 - Ordner aus `--add-dir` liefern ihre Regeln nur mit `CLAUDE_CODE_ADDITIONAL_DIRECTORIES_CLAUDE_MD=1`.
 
-## Beispiele
+## Beispiele für Claude Code Rules
 
 ### Beispiel 1: Testregeln
 
@@ -136,7 +136,7 @@ paths:
 # Regeln für Tests
 
 - Ein Test prüft ein Verhalten. Name sagt, was erwartet wird: `test_leere_liste_ergibt_null`.
-- Keine echten Personendaten. Muster-IBAN `DE89 3704 0044 0532 0130 00`, Mails an `@example.com`.
+- Keine echten Personendaten. Beispiel-IBAN `DE89 3704 0044 0532 0130 00`, Mails an `@example.com`.
 - Kein Netzwerk in Unit-Tests. Externe Dienste mocken.
 - Einen fehlschlagenden Test nie löschen oder auf skip setzen, um grün zu werden. Ursache melden.
 ```

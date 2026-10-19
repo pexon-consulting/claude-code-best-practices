@@ -2,7 +2,7 @@
 
 Claude Code startet jede Sitzung mit leerem Kontextfenster und trägt Wissen auf zwei Wegen weiter: über CLAUDE.md-Dateien, die du schreibst, und über die Auto Memory, in der Claude selbst Notizen ablegt (`MEMORY.md`, davon die ersten 200 Zeilen oder 25 KB pro Sitzung). Innerhalb einer Sitzung steuerst du den Kontext mit `/context`, `/compact` und `/clear`, zwischen Sitzungen mit `claude --continue` und `claude --resume`, und Fehler machst du mit Checkpoints und `/rewind` rückgängig. `/compact` nutzt du, wenn eine lange Sitzung weitergehen soll, `/clear`, wenn die nächste Aufgabe nichts mit der bisherigen zu tun hat.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -140,7 +140,7 @@ Abschalten lässt sich das mit `"fileCheckpointingEnabled": false` oder für ein
 | Claude hat gerade Mist gebaut | zweimal `Esc`, "Restore code and conversation" |
 | Kurze Frage nebenbei | `/btw` |
 
-## Beispiele
+## Beispiele für Claude Code Memory
 
 ### Beispiel 1: Komprimieren mit Fokus
 

@@ -32,7 +32,7 @@ def bewerte(text: str, kontakte_ab: int) -> tuple[str, str]:
     harte = [f for f in funde if f.art not in WEICH]
     if harte:
         arten = ", ".join(sorted({f"{NAMEN[f.art]} {f.vorschau}" for f in harte}))
-        return "hart", f"Personenbezogene Daten gefunden: {arten}. Durch Testdaten ersetzen (z.B. die Muster-IBAN DE89 3704 0044 0532 0130 00)."
+        return "hart", f"Personenbezogene Daten gefunden: {arten}. Durch Testdaten ersetzen (z.B. die verbreitete Beispiel-IBAN DE89 3704 0044 0532 0130 00)."
     hinweise = sorted({f"{NAMEN[f.art]} {f.vorschau}" for f in funde})
     zaehlung = muster.zaehle_kontakte(text)
     hinweise += [f"{n} {art}" for art, n in (("E-Mail-Adressen", zaehlung["email"]), ("Telefonnummern", zaehlung["telefon"])) if n >= kontakte_ab]

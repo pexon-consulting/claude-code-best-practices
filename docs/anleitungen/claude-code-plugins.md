@@ -2,7 +2,7 @@
 
 Ein Claude Code Plugin installierst du mit zwei Befehlen: zuerst den Marketplace bekannt machen (`claude plugin marketplace add owner/repo`), dann das Plugin installieren (`claude plugin install name@marketplace`). Einen eigenen Team-Marketplace betreibst du als Git-Repo mit einer Datei `.claude-plugin/marketplace.json`, die deine Plugins auflistet. Über `extraKnownMarketplaces` und `enabledPlugins` in `.claude/settings.json` bekommt jedes Teammitglied die Plugins automatisch angeboten.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -11,7 +11,7 @@ Ein Claude Code Plugin installierst du mit zwei Befehlen: zuerst den Marketplace
 - Die Präfixe `claude-`, `anthropic-` und `cc-plugin-` sind für Plugin-Namen reserviert. Deshalb heißt das Plugin dieses Repos `team-basis`.
 - Ein Marketplace ist ein Repo mit `.claude-plugin/marketplace.json`. Pflicht sind `name`, `owner` und `plugins`.
 - Für die Organisation steuerst du mit `strictKnownMarketplaces` in Managed Settings, aus welchen Quellen Plugins kommen dürfen.
-- `claude plugin validate --strict` gehört in die CI, damit kaputte Manifeste nicht im Team landen.
+- `claude plugin validate` gehört in die CI, damit kaputte Manifeste nicht im Team landen. `--strict` macht Warnungen zu Fehlern; liegt das Plugin im Repo-Root neben einer CLAUDE.md, warnt `validate` immer, dann ohne `--strict` prüfen.
 
 ## Wie installiere ich ein Claude Code Plugin?
 
@@ -105,7 +105,7 @@ Eine `CLAUDE.md` im Plugin-Root lädt Claude Code nicht als Kontext. Skills aus 
 
 In Hook-Befehlen setzt du die Variable in Anführungszeichen, weil Pfade Leerzeichen enthalten können: `"\"${CLAUDE_PLUGIN_ROOT}\"/scripts/format.sh"`.
 
-## Beispiele
+## Beispiele für Claude Code Plugins
 
 ### Beispiel 1: plugin.json für ein Team-Plugin
 
@@ -213,7 +213,7 @@ Eine leere Liste `"strictKnownMarketplaces": []` sperrt alle Quellen, auch den o
 
 ### Beispiel 6: Plugin in der CI prüfen
 
-Ein GitHub-Actions-Job, der Marketplace und Plugin bei jedem Pull Request validiert. `--strict` lässt den Job auch bei Warnungen scheitern.
+Ein GitHub-Actions-Job, der Marketplace und Plugin bei jedem Pull Request validiert. `--strict` lässt den Job auch bei Warnungen scheitern. Liegt das Plugin im Repo-Root und dort auch die CLAUDE.md des Repos, meldet `validate` die Warnung `CLAUDE.md at the plugin root is not loaded as project context`; dann prüfst du ohne `--strict` oder legst das Plugin in einen Unterordner wie hier `plugins/team-basis`.
 
 ```yaml
 name: plugins-validieren
@@ -246,7 +246,7 @@ Lokal meldet ein gültiges Plugin `✔ Validation passed` und endet mit Exit-Cod
 ## Sicherheit
 
 - Ein Plugin kann Hooks und MCP-Server mitbringen, die auf deinem Rechner Befehle ausführen. Installiere nur Plugins aus Quellen, deren Code du prüfen kannst.
-- Feste Versionen (`ref` auf einen Tag) machen Updates nachvollziehbar.
+- Feste Versionen (`ref` auf einen Tag) machen Updates nachvollziehbar. Für fremde Plugins ist ein geprüfter Fork in der eigenen Organisation sicherer, weil ein Tag im Original verschoben werden kann.
 - Für private Marketplace-Repos braucht jeder Nutzer Lesezugriff. In der CI richtest du einen Git-Credential-Helper ein, auf GitHub Actions z.B. mit `GH_TOKEN` und `gh auth setup-git`.
 - `strictPluginOnlyCustomization` in Managed Settings lässt Skills, Subagents, Hooks und MCP-Server nur noch aus Plugins, Managed Settings und den eingebauten Quellen zu.
 
@@ -282,7 +282,7 @@ Ja. In den Managed Settings setzt `enabledPlugins` mit `true` ein Plugin auf all
 
 ### Wie installiere ich das Plugin dieses Repos?
 
-`claude plugin marketplace add pexon-consulting/claude-code-best-practices` und danach `claude plugin install team-basis@claude-code-best-practices`. Es bringt die Schutz-Hooks und Skills aus der Vorlage mit.
+`claude plugin marketplace add pexon-consulting/claude-code-best-practices` und danach `claude plugin install team-basis@claude-code-best-practices`. Es bringt die Schutz-Hooks, die beiden Subagents und die Skills aus der Vorlage mit. Für Teams: auf einen Tag pinnen (`pexon-consulting/claude-code-best-practices@v0.2.0`) oder das Repo forken und den Fork eintragen.
 
 ## Weiterlesen
 

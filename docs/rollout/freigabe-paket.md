@@ -2,7 +2,9 @@
 
 Unterlage für IT-Sicherheit, Legal und Einkauf. Sie beschreibt das Werkzeug, die Datenflüsse, die geplante Konfiguration und die Schutzmaßnahmen und endet mit einer Checkliste für die Freigabe.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Unterlage erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 | Feld | Eintrag |
 | --- | --- |
@@ -63,7 +65,7 @@ Die Ausgangsfassung der Managed Settings liegt unter [vorlagen/managed-settings.
 | Bedrohung | Maßnahme | Technisch erzwungen durch |
 | --- | --- | --- |
 | Secrets im Kontext | deny-Regeln für `.env`, Schlüssel, Cloud-Credentials; Hook `secrets_schutz.py` | Managed Settings, Repo-Hooks |
-| Personenbezogene Daten im Prompt | Hook `pii_schutz.py` mit Prüfziffern für IBAN, Steuer-ID, SV-Nummer, Kreditkarte | Repo-Hooks, Plugin |
+| Personenbezogene Daten im Prompt | Hook `pii_schutz.py` mit Prüfziffern für IBAN, Steuer-ID, SV-Nummer, Kreditkarte in Prompts, Befehlen und geschriebenem Code (nicht in gelesenen Dateien); deny-Regeln für Datenordner | Repo-Hooks, Plugin |
 | Zerstörerische Befehle | Hook `befehle_schutz.py` sperrt z.B. `rm -rf /` und `git push --force`, fragt nach bei `git reset --hard`, `sudo`, `terraform destroy` | Repo-Hooks |
 | Umgehen der Rückfragen | `disableBypassPermissionsMode: "disable"` | Managed Settings |
 | Aufweichen der Regeln | [`allowManagedPermissionRulesOnly`], [`allowManagedHooksOnly`] | Managed Settings |

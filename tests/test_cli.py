@@ -72,6 +72,12 @@ def test_audit_sauber(projekt, capsys):
     assert code == 0, aus
 
 
+def test_bericht_singular():
+    from claude_team.bericht import summe
+    assert summe({"fehler": 1, "warnung": 1, "hinweis": 1}) == "1 Fehler, 1 Warnung, 1 Hinweis"
+    assert summe({"fehler": 2, "warnung": 0, "hinweis": 3}) == "2 Fehler, 0 Warnungen, 3 Hinweise"
+
+
 def test_falscher_ordner(capsys):
     with pytest.raises(SystemExit) as fehler:
         main(["audit", "/gibt/es/nicht"])
@@ -118,7 +124,7 @@ def test_scannen_stdin(monkeypatch, capsys):
 
 
 def test_scannen_kontakte(projekt, capsys):
-    schreibe(projekt, "liste.txt", "\n".join(f"p{i}@firma.de" for i in range(3)))
+    schreibe(projekt, "liste.txt", "\n".join(f"p{i}@firma.example" for i in range(3)))
     assert lauf(capsys, "scannen", projekt / "liste.txt")[0] == 0
     assert lauf(capsys, "scannen", projekt / "liste.txt", "--kontakte-ab", "3")[0] == 1
 

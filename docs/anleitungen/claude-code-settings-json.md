@@ -2,7 +2,7 @@
 
 Claude Code liest Einstellungen aus vier settings.json-Ebenen: Managed Settings der Organisation, `.claude/settings.local.json` (persönlich im Projekt), `.claude/settings.json` (im Team geteilt) und `~/.claude/settings.json` (persönlich für alle Projekte). Bei Konflikten gewinnt die höhere Ebene in dieser Reihenfolge: Managed, dann `--settings` auf der Kommandozeile, dann lokal, dann Projekt, dann Nutzer. Listen wie `permissions.allow` werden dabei nicht ersetzt, sondern über alle Ebenen zusammengeführt.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -224,13 +224,13 @@ Die Hooks der Vorlage starten mit `python3 "${CLAUDE_PROJECT_DIR}/.claude/hooks/
 | --- | --- | --- |
 | SessionStart | `sitzungsstart.py` | Branch, offene Änderungen und letzte Commits als Kontext |
 | UserPromptSubmit | `pii_schutz.py` | blockt IBAN, Steuer-ID und ähnliche Daten, bevor der Prompt ans Modell geht |
-| PreToolUse | `secrets_schutz.py`, `pii_schutz.py`, `befehle_schutz.py` | sperrt Secrets, personenbezogene Daten und gefährliche Befehle |
-| PostToolUse | `format_nach_edit.py`, `protokoll.py` | formatiert nach Edits, schreibt ein Protokoll ohne Dateiinhalte |
+| PreToolUse | `secrets_schutz.py`, `pii_schutz.py`, `befehle_schutz.py` | sperrt Secrets, personenbezogene Daten in Befehlen und neuem Code sowie gefährliche Befehle; gelesene Dateiinhalte prüft kein Hook |
+| PostToolUse | `format_nach_edit.py`, `protokoll.py` | formatiert nach Edits; das Protokoll ohne Dateiinhalte ist standardmäßig aus |
 | Stop | `stopp_tests.py` | führt den Testbefehl aus `.claude/schutz.json` aus |
 
 Die `deny`-Regeln sind die erste Schutzschicht. Die Hooks sind die zweite und lassen eine Aktion durch, wenn sie selbst abstürzen, damit ein kaputter Hook niemanden aussperrt.
 
-## Beispiele
+## Beispiele für die settings.json
 
 ### Beispiel 1: Persönliche Datei für alle Projekte
 
@@ -259,13 +259,15 @@ Für `.claude/settings.json`, wenn die volle Vorlage zu viel ist.
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "permissions": {
     "disableBypassPermissionsMode": "disable",
-    "allow": ["Bash(git status *)", "Bash(git diff *)", "Bash(pytest *)"],
+    "allow": ["Bash(git status *)", "Bash(git diff *)", "Bash(ruff check *)"],
     "ask": ["Bash(git push *)"],
-    "deny": ["Read(.env)", "Read(.env.*)", "Read(**/*.pem)", "Read(**/*.key)"]
+    "deny": ["Read(.env)", "Read(.env.*)", "Read(**/*.pem)", "Read(**/*.key)", "Bash(git diff *--output*)"]
   },
   "env": { "DISABLE_TELEMETRY": "1" }
 }
 ```
+
+Testbefehle wie `pytest` stehen bewusst nicht in `allow`, weil sie Code aus dem Repo ausführen. Wann sie trotzdem passen, steht in [Claude Code Permissions](./claude-code-permissions.md#beispiel-2-python-projekt).
 
 ### Beispiel 3: Persönliche Ausnahme im Projekt
 
@@ -307,7 +309,7 @@ Eine Kombination dokumentierter Keys für `managed-settings.json`. Eine ausführ
 
 ## Schritt für Schritt: Team-Settings einführen
 
-1. Vorschau ansehen: `uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run`.
+1. Vorschau ansehen: `uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run`.
 2. Einrichten ohne `--dry-run`. Gibt es schon eine `.claude/settings.json`, entsteht `.claude/settings.vorschlag.json` mit den zusammengeführten Werten.
 3. Die `allow`-Liste an die echten Befehle des Projekts anpassen: Testbefehl, Linter, Build.
 4. Prüfen, dass die Datei gültiges JSON ist: `python3 -m json.tool .claude/settings.json > /dev/null`.

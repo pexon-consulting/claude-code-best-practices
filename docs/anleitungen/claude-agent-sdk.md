@@ -2,7 +2,7 @@
 
 Das Claude Agent SDK ist eine Bibliothek für Python und TypeScript, die die Agentenschleife von Claude Code in eigene Anwendungen bringt: mit eingebauten Tools, Rechten, Sitzungen, Hooks, Subagents und MCP-Servern. Früher hieß es Claude Code SDK; die Pakete heißen jetzt `@anthropic-ai/claude-agent-sdk` für TypeScript und `claude-agent-sdk` für Python. Für einfache Skripte und CI reicht oft der Headless-Modus der CLI (`claude -p`), das SDK lohnt sich, wenn du Nachrichten, Rechte und Kosten im eigenen Code steuern willst.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -104,7 +104,7 @@ Wichtige Optionen:
 
 Die Ergebnisnachricht (`type === "result"` in TypeScript, `ResultMessage` in Python) enthält `subtype` (`"success"`, `"error_max_turns"`, `"error_max_budget_usd"` und weitere), `result`, `session_id`, `num_turns` und `total_cost_usd`. Der Kostenwert ist eine Schätzung auf Client-Seite, keine Abrechnung; in Python ist das Feld optional.
 
-## Beispiele
+## Beispiele für Claude Agent SDK
 
 ### Beispiel 1: Minimaler Agent in TypeScript
 

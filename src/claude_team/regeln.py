@@ -65,11 +65,13 @@ R_MD_BEFEHLE = regel("CC003", "cc003-claude-md-ohne-befehle", HINWEIS, "CLAUDE.m
 R_MD_IMPORT = regel("CC004", "cc004-import-fehlt", FEHLER, "@-Import zeigt auf fehlende Datei")
 R_MD_LOKAL = regel("CC005", "cc005-claude-local-nicht-ignoriert", FEHLER, "CLAUDE.local.md nicht in .gitignore")
 R_MD_AGENTS = regel("CC006", "cc006-agents-md-wird-ignoriert", HINWEIS, "AGENTS.md wird neben CLAUDE.md nicht gelesen")
+R_MD_PLATZHALTER = regel("CC007", "cc007-platzhalter-offen", HINWEIS, "Platzhalter {{...}} in CLAUDE.md nicht ausgefüllt")
 
 MD_DATEIEN = ("CLAUDE.md", ".claude/CLAUDE.md")
 _IMPORT = re.compile(r"(?<![\w`/])@((?:~/|\.{1,2}/|/)?[\w./\\ -]*?[\w-]+(?:\.[\w]+)?)(?=[.!?]?(?:[\s,;:)]|$))")
 _CODEBLOCK = re.compile(r"```.*?```|~~~.*?~~~", re.S)
 _CODESPAN = re.compile(r"`[^`\n]*`")
+_PLATZHALTER = re.compile(r"\{\{[A-Z][A-Z0-9_]*\}\}")
 _BEFEHL_HINWEIS = re.compile(r"(?im)(?:^\s*(?:[-*]\s+)?(?:[$>]\s*)?|`)(?:npm|pnpm|yarn|bun|npx|uv|uvx|pip|python3?|pytest|make|cargo|go|mvn|gradle|\./gradlew|dotnet|docker|composer|php|bundle|rake|deno|just|task|tox|nox|ruff)\b")
 
 
@@ -112,6 +114,10 @@ def claude_md(p: Projekt) -> Iterator[Befund]:
             yield befund(R_MD_LANG, relativ, f"{zeilen} Zeilen. Anthropic empfiehlt unter 200. Bereichsregeln nach .claude/rules/ mit paths verschieben.")
         if relativ != "CLAUDE.local.md" and not _BEFEHL_HINWEIS.search(text):
             yield befund(R_MD_BEFEHLE, relativ, "Keine Build- oder Testbefehle gefunden. Claude rät sonst, wie getestet wird.")
+        offen = sorted(set(_PLATZHALTER.findall(_CODEBLOCK.sub("", text))))
+        if offen:
+            nr = next(i for i, z in enumerate(text.splitlines(), 1) if offen[0] in z)
+            yield befund(R_MD_PLATZHALTER, relativ, f"Noch nicht ausgefüllt: {', '.join(offen)}. Claude liest die Platzhalter wörtlich.", nr)
         basis = p.datei(relativ).parent
         for nr, ziel in imports(text):
             pfad = Path(ziel).expanduser() if ziel.startswith("~/") else (Path(ziel) if ziel.startswith("/") else basis / ziel)

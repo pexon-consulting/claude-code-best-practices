@@ -167,5 +167,25 @@ def test_sensible_pfade(pfad, erwartet):
 
 
 def test_kontakte_zaehlen_ohne_harmlose_adressen():
-    text = "a@firma.de b@firma.de c@firma.de info@firma.de max@example.com, Tel. +49 30 1234567, mobil 0171 2345678"
+    # Rufnummern aus den Bereichen, die die Bundesnetzagentur für Film und Fernsehen freihält
+    text = "a@firma.example b@firma.example c@firma.example info@firma.example max@example.com, Tel. +49 30 23125123, Fax 040 66969123"
     assert muster.zaehle_kontakte(text) == {"email": 3, "telefon": 2}
+
+
+@pytest.mark.parametrize("wert", ["4012888888881881", "2223 0031 2200 3222"])
+def test_weitere_testkarten(wert):
+    assert "kreditkarte" not in arten(wert)
+
+
+def test_iban_klein_und_mit_bindestrichen():
+    wert = iban()
+    assert arten(wert.lower()) == {"iban"}
+    assert arten("-".join(wert[i:i + 4] for i in range(0, len(wert), 4))) == {"iban"}
+
+
+def test_iban_klein_nur_bei_bekannter_laenge():
+    assert not muster.iban_gueltig("xk051212012345678906")
+
+
+def test_claude_credentials_sind_sensibel():
+    assert muster.ist_sensibler_pfad("home/.claude/.credentials.json")

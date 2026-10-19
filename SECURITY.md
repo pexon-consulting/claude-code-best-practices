@@ -2,7 +2,7 @@
 
 ## Lücke melden
 
-Bitte keine öffentlichen Issues für Sicherheitslücken. Nutze [GitHub Private Vulnerability Reporting](https://github.com/pexon-consulting/claude-code-best-practices/security/advisories/new) dieses Repos. Wir antworten innerhalb von fünf Werktagen.
+Bitte keine öffentlichen Issues für Sicherheitslücken. Nutze [GitHub Private Vulnerability Reporting](https://github.com/pexon-consulting/claude-code-best-practices/security/advisories/new) dieses Repos. Wir bemühen uns, innerhalb von fünf Werktagen zu antworten. Ein Anspruch auf eine Antwort oder eine Behebung besteht nicht.
 
 Besonders interessiert uns:
 

@@ -2,7 +2,7 @@
 
 Den Claude Code Plan Mode aktivierst du mit `Shift+Tab`, bis die Statusleiste `⏸ plan mode on` zeigt, mit `/plan` vor einem einzelnen Prompt oder beim Start mit `claude --permission-mode plan`. Claude liest dann Dateien, führt erkundende Befehle aus und schreibt einen Plan, ändert aber keinen Quellcode, bis du den Plan freigibst. Sinnvoll ist das, wenn der Lösungsweg unklar ist, die Änderung mehrere Dateien betrifft oder du den Code nicht kennst.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -86,7 +86,7 @@ Planen kostet Zeit und Tokens. Lässt sich die Änderung in einem Satz beschreib
 
 `max` gilt nur für die laufende Sitzung, außer du setzt es über die Umgebungsvariable. Organisationen können mit `maxEffortLevel` eine Obergrenze festlegen.
 
-## Beispiele
+## Beispiele für den Plan Mode
 
 ### Beispiel 1: Neues Feature erst erkunden und planen
 

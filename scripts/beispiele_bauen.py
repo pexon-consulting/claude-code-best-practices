@@ -177,7 +177,7 @@ def _scannen(o: Path) -> str:
     neues_repo(o)
     schreibe(o, "src/zahlung.py", f'API_TOKEN = "{GITHUB_TOKEN}"\n')
     schreibe(o, "tests/fixtures/kunden.csv", f"name;iban\nMax Muster;{IBAN}\nTest;DE89370400440532013000\n")
-    schreibe(o, "docs/team.md", "\n".join(f"- person{i}@firma.de" for i in range(6)) + "\n")
+    schreibe(o, "docs/team.md", "\n".join(f"- person{i}@firma.example" for i in range(6)) + "\n")
     git(o, "add", "-A")
     return befehl(o, "scannen", ".")
 
@@ -227,6 +227,7 @@ def _kurz_hash(o: Path) -> str:
 
 def _protokoll(o: Path) -> str:
     neues_repo(o)
+    schreibe(o, ".claude/schutz.json", {"protokoll": {"aktiv": True}})
     hook(o, "protokoll.py", {"hook_event_name": "PostToolUse", "tool_name": "Bash", "session_id": "3f9c2a71-0000", "permission_mode": "default",
                             "tool_input": {"command": f"curl -H 'Authorization: token {GITHUB_TOKEN}' https://api.github.com/user"}, "duration_ms": 412})
     eintrag = json.loads(next((o / ".claude" / "protokoll").glob("*.jsonl")).read_text(encoding="utf-8"))
@@ -244,19 +245,19 @@ BEISPIELE: list[Beispiel] = [
     Beispiel("Bericht als Markdown für den Pull Request", "Mit `--format markdown` entsteht eine Tabelle, die sich als PR-Kommentar oder in die GitHub Step Summary schreiben lässt. Jede Regel verlinkt auf ihre Erklärung. Hier ohne die Hinweise.",
              "claude-team audit . --format markdown --ignorieren CC003,CC019,CC020,CC044", _audit_markdown, "markdown"),
     Beispiel("Bericht als JSON", "Für eigene Auswertungen oder ein Dashboard. Gekürzt auf zwei Befunde.", "claude-team audit . --format json", _audit_json, "json"),
-    Beispiel("Ein eingerichtetes Repo", "Direkt nach `claude-team einrichten` meldet das Audit nichts mehr, auch keine Hinweise.", "claude-team einrichten . && claude-team audit . --schwelle hinweis", _audit_sauber),
+    Beispiel("Ein eingerichtetes Repo", "Direkt nach `claude-team einrichten` meldet das Audit keine Fehler und Warnungen mehr. Übrig bleibt der Hinweis auf Platzhalter in der CLAUDE.md, die nur du ausfüllen kannst.", "claude-team einrichten . && claude-team audit . --schwelle hinweis", _audit_sauber),
     Beispiel("Einrichten als Probelauf", "In einem pnpm-Projekt ohne Claude-Konfiguration. Nichts wird geschrieben.", "claude-team einrichten . --dry-run", _einrichten_probe),
     Beispiel("Einrichten neben bestehender Konfiguration", "CLAUDE.md und settings.json gibt es schon. Sie bleiben unverändert, daneben entstehen Vorschläge. `.gitignore` wird nur ergänzt.",
              "claude-team einrichten . --ohne agents,skills,regeln,mcp", _einrichten_vorschlag),
     Beispiel("Der zusammengeführte Vorschlag", "Eigene Werte bleiben vorn, die Basis kommt dazu. Gekürzt.", "cat .claude/settings.vorschlag.json", _einrichten_merge, "json"),
     Beispiel("CLAUDE.md für ein Python-Projekt mit uv", "Die Befehle kommen aus `pyproject.toml` und `uv.lock`. Erste 20 Zeilen.", "claude-team einrichten . --ohne settings,hooks,regeln,agents,skills,mcp,gitignore", _claude_md_python, "markdown"),
-    Beispiel("Repo nach Secrets und Kundendaten scannen", "Durchsucht alle Dateien, die Git kennt. Die Muster-IBAN der Bundesbank zählt nicht, eine echte IBAN schon. Werte erscheinen nur maskiert.",
+    Beispiel("Repo nach Secrets und Kundendaten scannen", "Durchsucht alle Dateien, die Git kennt. Eine verbreitete Beispiel-IBAN zählt nicht, eine IBAN mit gültiger Prüfziffer schon. Werte erscheinen nur maskiert.",
              "claude-team scannen .", _scannen),
     Beispiel("Text über stdin scannen", "Zum Beispiel in einem pre-commit-Hook oder bevor ein Ticket-Text in einen Prompt geht.", "echo \"Rückfrage zur Steuer-ID <Steuer-ID> ...\" | claude-team scannen -", _scannen_stdin),
     Beispiel("Alle Regeln auflisten", "Gekürzt.", "claude-team regeln", _regeln),
     Beispiel("Hook: .env lesen", "Claude will `.env` öffnen. Der Secrets-Hook antwortet mit `deny`, Claude sieht den Grund.",
              "secrets_schutz.py", _hook_fall("secrets_schutz.py", werkzeug("Read", file_path="__PROJEKT__/.env")), "json", _json(werkzeug("Read", file_path="/projekt/.env"))),
-    Beispiel("Hook: .env über Bash ausgeben", "Die deny-Regel `Read(.env)` erkennt `cat .env`, aber nicht jeden Umweg. Der Hook prüft jeden Lesebefehl in der Kette.",
+    Beispiel("Hook: .env über Bash ausgeben", "Die deny-Regel `Read(.env)` erkennt `cat .env`, aber nicht jeden Umweg. Der Hook sucht in jedem Teil der Kette nach Pfaden zu Zugangsdaten, auch in Interpreter-Code wie `python -c`.",
              "secrets_schutz.py", _hook_fall("secrets_schutz.py", werkzeug("Bash", command="grep DATABASE config/.env.production | head -1")), "json",
              _json(werkzeug("Bash", command="grep DATABASE config/.env.production | head -1"))),
     Beispiel("Hook: Umgebungsvariablen auflisten", "`env` und `printenv` geben alle Tokens der Shell aus.", "secrets_schutz.py",
@@ -267,7 +268,7 @@ BEISPIELE: list[Beispiel] = [
     Beispiel("Hook: echte IBAN in eine Datei", "Prüfziffer gültig, also kein Zufall. Der PII-Hook blockt.", "pii_schutz.py",
              lambda o: entschaerfe(_hook_fall("pii_schutz.py", werkzeug("Write", file_path="__PROJEKT__/seed.sql", content=f"insert into konto values ('Max Muster', '{IBAN}');"))(o)), "json",
              _json(werkzeug("Write", file_path="/projekt/seed.sql", content=f"insert into konto values ('Max Muster', '{IBAN}');"))),
-    Beispiel("Hook: Muster-IBAN für Tests", "Die Muster-IBAN der Bundesbank und bekannte Testkarten sind erlaubt.", "pii_schutz.py",
+    Beispiel("Hook: Beispiel-IBAN für Tests", "Verbreitete Beispiel-IBANs aus Dokumentationen und bekannte Testkarten sind erlaubt.", "pii_schutz.py",
              _hook_fall("pii_schutz.py", werkzeug("Write", file_path="__PROJEKT__/tests/test_zahlung.py", content='IBAN = "DE89370400440532013000"\n')), "json",
              _json(werkzeug("Write", file_path="/projekt/tests/test_zahlung.py", content='IBAN = "DE89370400440532013000"\n'))),
     Beispiel("Hook: Steuer-ID im Prompt", "Beim Prompt greift der Hook, bevor der Text an das Modell geht.", "pii_schutz.py",
@@ -277,8 +278,8 @@ BEISPIELE: list[Beispiel] = [
              lambda o: entschaerfe(_hook_fall("pii_schutz.py", werkzeug("Write", file_path="__PROJEKT__/rechnung.md", content=f"Leistungsempfänger: USt-IdNr. {UST_ID}"))(o)), "json",
              _json(werkzeug("Write", file_path="/projekt/rechnung.md", content=f"Leistungsempfänger: USt-IdNr. {UST_ID}"))),
     Beispiel("Hook: eingefügter Kundenexport", "Sechs verschiedene E-Mail-Adressen in einem Schreibvorgang. Ab fünf fragt der Hook (einstellbar mit `pii.kontakte_ab`).", "pii_schutz.py",
-             _hook_fall("pii_schutz.py", werkzeug("Write", file_path="__PROJEKT__/import.csv", content="\n".join(f"kunde{i}@firma-{i}.de" for i in range(6)))), "json",
-             _json(werkzeug("Write", file_path="/projekt/import.csv", content="kunde0@firma-0.de\\n... (6 Adressen)"))),
+             _hook_fall("pii_schutz.py", werkzeug("Write", file_path="__PROJEKT__/import.csv", content="\n".join(f"kunde{i}@firma-{i}.example" for i in range(6)))), "json",
+             _json(werkzeug("Write", file_path="/projekt/import.csv", content="kunde0@firma-0.example\\n... (6 Adressen)"))),
     Beispiel("Hook: rm -rf hinter einem cd", "`Bash(rm -rf ~)` als deny-Regel greift nur am Anfang. Der Hook prüft die ganze Kette.", "befehle_schutz.py",
              _hook_fall("befehle_schutz.py", werkzeug("Bash", command="cd /tmp && rm -rf ~")), "json", _json(werkzeug("Bash", command="cd /tmp && rm -rf ~"))),
     Beispiel("Hook: Force-Push", "", "befehle_schutz.py", _hook_fall("befehle_schutz.py", werkzeug("Bash", command="git push --force origin main")), "json",
@@ -293,7 +294,7 @@ BEISPIELE: list[Beispiel] = [
              "stopp_tests.py", _stopp, "json", _json({"hook_event_name": "Stop", "stop_hook_active": False})),
     Beispiel("Hook: Git-Stand beim Start", "Claude bekommt den Stand mit, bevor die erste Frage kommt.", "sitzungsstart.py", _sitzungsstart, "json",
              _json({"hook_event_name": "SessionStart", "source": "startup"})),
-    Beispiel("Hook: Protokoll ohne Inhalte", "Eine Zeile je Tool-Aufruf in `.claude/protokoll/<datum>.jsonl`. Tokens im Befehl werden ersetzt, Dateiinhalte nie gespeichert. Gezeigt ist die geschriebene Zeile.", "protokoll.py", _protokoll, "json",
+    Beispiel("Hook: Protokoll ohne Inhalte", "Standardmäßig aus, eingeschaltet mit `\"protokoll\": {\"aktiv\": true}` in `.claude/schutz.json`. Eine Zeile je Tool-Aufruf in `.claude/protokoll/<datum>.jsonl`. Tokens, Kennungen und E-Mail-Adressen im Befehl werden ersetzt, Dateiinhalte nie gespeichert, Dateien nach `aufbewahrung_tage` (Standard 30) gelöscht. Gezeigt ist die geschriebene Zeile.", "protokoll.py", _protokoll, "json",
              _json({"hook_event_name": "PostToolUse", "tool_name": "Bash", "session_id": "3f9c2a71-0000", "permission_mode": "default",
                     "tool_input": {"command": f"curl -H 'Authorization: token {GITHUB_TOKEN}' https://api.github.com/user"}, "duration_ms": 412})),
 ]

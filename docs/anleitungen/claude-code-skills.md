@@ -2,7 +2,7 @@
 
 Claude Code Skills sind Ordner mit einer Datei `SKILL.md`, die Anweisungen für eine wiederkehrende Aufgabe enthält und per `/name` oder automatisch durch Claude geladen wird. Einen Skill für ein Projekt legst du unter `.claude/skills/<name>/SKILL.md` an, einen persönlichen unter `~/.claude/skills/<name>/SKILL.md`. Den Kopf bildet ein YAML-Frontmatter mit `description`, darunter folgen die Anweisungen in Markdown.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -118,7 +118,7 @@ Die Doku empfiehlt, eine `SKILL.md` unter 500 Zeilen zu halten (Regel [CC043](..
 └── scripts/check.py
 ```
 
-## Beispiele
+## Beispiele für Claude Code Skills
 
 ### Beispiel 1: commit nach Conventional Commits
 
@@ -342,4 +342,5 @@ Ja, mit `disallowed-tools` für die Dauer des Skills. `allowed-tools` gibt dageg
 - [Claude Code Hooks](./claude-code-hooks.md): Regeln, die immer greifen müssen
 - [CLAUDE.md](./claude-md.md): was in die Projektanweisungen gehört und was in einen Skill
 - Vorlagen: [commit](../../src/claude_team/vorlage/.claude/skills/commit/SKILL.md), [handoff](../../src/claude_team/vorlage/.claude/skills/handoff/SKILL.md)
+- [Claude Agent SDK: eigene Agenten auf Basis von Claude Code bauen](./claude-agent-sdk.md)
 - Offizielle Doku: [Skills](https://code.claude.com/docs/en/skills)

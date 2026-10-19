@@ -100,6 +100,20 @@ def test_cc006_agents_md_neben_claude_md(projekt):
     assert "CC006" not in regeln(projekt)
 
 
+def test_cc007_offene_platzhalter(projekt):
+    basis(projekt, claude_md="# App\n\n{{EIN_SATZ_WAS_DAS_PROJEKT_TUT}}\n\n- Test: `npm test`\n- Lint: {{LINT}}\n")
+    (b,) = befunde(projekt, "CC007")
+    assert b.zeile == 3 and "{{EIN_SATZ_WAS_DAS_PROJEKT_TUT}}" in b.meldung and "{{LINT}}" in b.meldung
+    basis(projekt, claude_md="# App\n\n`npm test`\n\n```\n{{BEISPIEL}}\n```\n")
+    assert "CC007" not in regeln(projekt)
+
+
+def test_cc007_nach_einrichten(projekt):
+    schreibe(projekt, "package.json", '{"scripts": {"test": "vitest"}}')
+    Einrichtung(projekt, set()).ausfuehren()
+    assert "CC007" in regeln(projekt)
+
+
 def test_imports_funktion():
     assert imports("Lies @./a.md, dann @~/x.md.\n`@b.md`") == [(1, "./a.md"), (1, "~/x.md")]
 

@@ -2,7 +2,7 @@
 
 Eine eigene Claude Code Statusline richtest du über das Feld `statusLine` in `~/.claude/settings.json` ein: Es zeigt auf ein Skript, das Sitzungsdaten als JSON über stdin bekommt und eine Zeile Text ausgibt. Der schnellste Weg ist `/statusline` mit einer Beschreibung in normaler Sprache, Claude Code schreibt dann Skript und Einstellung selbst. So siehst du Modell, Kontextfüllung, Git-Branch und geschätzte Kosten ständig am unteren Rand.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -88,7 +88,7 @@ Claude Code wartet 300 ms, bis Änderungen zur Ruhe kommen, und startet das Skri
 
 `used_percentage` rechnet nur mit Eingabe: `input_tokens + cache_creation_input_tokens + cache_read_input_tokens`. `current_usage` ist vor dem ersten API-Aufruf und direkt nach `/compact` `null`. `/context` kann etwas höher liegen, weil es Nachrichten seit der letzten Antwort schätzt. Viele Felder fehlen am Anfang einer Sitzung, deshalb brauchst du immer Standardwerte wie `// 0` in jq.
 
-## Beispiele
+## Beispiele für die Statusline
 
 ### Beispiel 1: Einzeiler mit jq
 

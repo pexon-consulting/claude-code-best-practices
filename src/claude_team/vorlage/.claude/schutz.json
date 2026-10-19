@@ -13,8 +13,9 @@
     "fragen_bei": ["git push", "npm publish", "terraform apply", "kubectl delete", "helm upgrade"]
   },
   "protokoll": {
-    "aktiv": true,
-    "ordner": ".claude/protokoll"
+    "aktiv": false,
+    "ordner": ".claude/protokoll",
+    "aufbewahrung_tage": 30
   },
   "stopp": {
     "befehl": ""

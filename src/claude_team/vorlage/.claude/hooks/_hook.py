@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import sys
 from fnmatch import fnmatch
 from pathlib import Path
@@ -17,12 +18,25 @@ STANDARD = {
     "secrets": {"modus": "deny", "pfade_ausnehmen": []},
     "pii": {"modus": "deny", "kontakte_ab": 5, "pfade_ausnehmen": []},
     "befehle": {"modus": "deny", "fragen_bei": ["git push", "npm publish", "terraform apply", "kubectl delete"]},
-    "protokoll": {"aktiv": True, "ordner": ".claude/protokoll"},
+    "protokoll": {"aktiv": False, "ordner": ".claude/protokoll", "aufbewahrung_tage": 30},
     "stopp": {"befehl": ""},
 }
 SHELL_WERKZEUGE = ("Bash", "PowerShell")
 DATEIFELDER = ("file_path", "notebook_path", "path")
 INHALTSFELDER = ("content", "new_string", "new_source", "command", "prompt")
+# Commit- und Tag-Nachrichten: der Text ist kein Befehl, z.B. git commit -m "fix: rm -rf / verhindern"
+NACHRICHT = re.compile(r"""(\s(?:-m|--message)(?:\s+|=))("(?:[^"\\]|\\.)*"|'[^']*')""", re.S)
+# "$(cat <<'EOF' ... EOF)" ist wörtlicher Text; andere $(...) und `...` führt die Shell aus
+HEREDOC_TEXT = re.compile(r"""^"\$\(cat\s+<<-?\s*'(\w+)'\n.*\n\1\s*\)"$""", re.S)
+
+
+def ohne_nachrichten(befehl: str) -> str:
+    """Ersetzt wörtliche Nachrichten nach -m oder --message durch "". Nachrichten mit $(...) bleiben."""
+    def ersetze(m: re.Match[str]) -> str:
+        text = m.group(2)
+        woertlich = text.startswith("'") or not ("$(" in text or "`" in text) or HEREDOC_TEXT.match(text)
+        return m.group(1) + '""' if woertlich else m.group(0)
+    return NACHRICHT.sub(ersetze, befehl)
 
 
 def lies_eingabe() -> dict:

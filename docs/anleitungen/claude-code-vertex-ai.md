@@ -2,7 +2,9 @@
 
 Für Google Vertex AI braucht Claude Code drei Umgebungsvariablen: `CLAUDE_CODE_USE_VERTEX=1`, `ANTHROPIC_VERTEX_PROJECT_ID` mit deiner Projekt-ID und `CLOUD_ML_REGION` mit `global`, einer Multi-Region wie `eu` oder einer Region wie `europe-west1`. Angemeldet wird über die Application Default Credentials von `gcloud` (`gcloud auth application-default login`), die Claude-Modelle schaltest du vorher im Model Garden frei. Google nennt den Dienst inzwischen "Google Cloud's Agent Platform"; im Login-Menü von Claude Code heißt er weiter "Google Vertex AI".
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -35,7 +37,7 @@ Für Google Vertex AI braucht Claude Code drei Umgebungsvariablen: `CLAUDE_CODE_
 
 Wer Daten in der EU halten will, setzt `CLOUD_ML_REGION` auf `eu` oder eine EU-Region statt auf `global`, prüft im Model Garden, welche Modelle dort angeboten werden, und setzt keine `VERTEX_REGION_CLAUDE_*`-Variable auf eine Region außerhalb der EU. Das Development Partner Program von Anthropic gibt es für Agent Platform nicht. Verträge und Auftragsverarbeitung bei Google klärst du mit dem Datenschutzbeauftragten, siehe [Claude Code und DSGVO](./claude-code-dsgvo.md).
 
-## Beispiele
+## Beispiele für Claude Code mit Vertex AI
 
 ### Beispiel 1: API aktivieren und anmelden
 
@@ -218,7 +220,7 @@ Ja, Fable-Modelle, Sonnet 5 und neuer sowie Opus 4.7 und neuer laufen dort stand
 ## Weiterlesen
 
 - [Claude Code und DSGVO](./claude-code-dsgvo.md)
-- [Claude Code Bedrock](./claude-code-bedrock.md) und [Claude Code Azure Foundry](./claude-code-azure-foundry.md)
+- [Claude Code Bedrock](./claude-code-bedrock.md) und [Claude Code mit Microsoft Foundry (Azure)](./claude-code-azure-foundry.md)
 - [Claude Code LLM-Gateway](./claude-code-llm-gateway.md)
 - [Claude Code Enterprise: Managed Settings](./claude-code-enterprise.md)
 - [Claude Code Kosten](./claude-code-kosten.md)

@@ -2,7 +2,7 @@
 
 Claude Code verbindest du mit VS Code über die Extension `anthropic.claude-code` aus dem Marketplace (ab VS Code 1.94.0). Sie bringt eine eigene Kopie der CLI mit und öffnet Claude in einem Panel. Für IntelliJ, PyCharm, WebStorm und andere JetBrains-IDEs installierst du die CLI und das Plugin "Claude Code [Beta]" aus dem JetBrains Marketplace und startest `claude` im Terminal der IDE. Aus einem externen Terminal verbindest du dich in beiden Fällen mit `/ide`.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -27,7 +27,7 @@ Claude Code verbindest du mit VS Code über die Extension `anthropic.claude-code
 
 Die VS-Code-Extension kann nicht alles, was die CLI kann: Sie bietet nur einen Teil der Befehle und Skills, keinen `!`-Shortcut für Bash und keine Tab-Vervollständigung. Checkpoints und `/mcp` gibt es auch im Panel. Brauchst du eine reine CLI-Funktion, startest du `claude` im integrierten Terminal; dafür musst du die CLI einmal [separat installieren](./claude-code-installieren.md).
 
-## Beispiele
+## Beispiele für VS Code und JetBrains
 
 ### Beispiel 1: VS-Code-Extension installieren
 
@@ -120,7 +120,7 @@ Die Extension prüft Zugangsdaten vor dem Start nur aus ihrer eigenen Einstellun
 }
 ```
 
-Für Bedrock, Agent Platform oder Foundry reicht "Disable Login Prompt", die Anbieter-Variablen gehören dann in den `env`-Block von `~/.claude/settings.json`. Siehe [Bedrock](./claude-code-bedrock.md), [Vertex AI](./claude-code-vertex-ai.md), [Azure Foundry](./claude-code-azure-foundry.md) und [LLM-Gateway](./claude-code-llm-gateway.md).
+Für Bedrock, Agent Platform oder Foundry reicht "Disable Login Prompt", die Anbieter-Variablen gehören dann in den `env`-Block von `~/.claude/settings.json`. Siehe [Bedrock](./claude-code-bedrock.md), [Vertex AI](./claude-code-vertex-ai.md), [Microsoft Foundry (Azure)](./claude-code-azure-foundry.md) und [LLM-Gateway](./claude-code-llm-gateway.md).
 
 ### Beispiel 7: Claude aus einem Link heraus öffnen
 
@@ -222,4 +222,5 @@ Ja. In VS Code schaltest du "Disable Login Prompt" ein und richtest den Anbieter
 - [Claude Code settings.json](./claude-code-settings-json.md)
 - [Claude Code MCP-Server](./claude-code-mcp.md)
 - [Vorlage `.claude/settings.json`](../../src/claude_team/vorlage/.claude/settings.json)
+- [Claude Code Tutorial auf Deutsch: die erste Stunde mit Claude Code](./claude-code-tutorial-deutsch.md)
 - Offizielle Doku: [VS Code](https://code.claude.com/docs/en/vs-code), [JetBrains IDEs](https://code.claude.com/docs/en/jetbrains)

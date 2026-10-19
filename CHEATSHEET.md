@@ -2,7 +2,7 @@
 
 Die wichtigsten Slash Commands, CLI-Flags, Tastenkürzel und Konfigurationsorte von Claude Code zum Nachschlagen. Details stehen in den verlinkten Anleitungen.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](./README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](./README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Slash Commands
 
@@ -148,8 +148,8 @@ Mehr: [Plugins](docs/anleitungen/claude-code-plugins.md)
 ## Audit für das eigene Repo
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit .
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run
 ```
 
 Das Audit prüft CLAUDE.md, Settings, Hooks, MCP, Skills und Subagents gegen die [Prüfregeln](docs/regeln.md). `einrichten` überschreibt nichts, sondern legt Vorschläge als `settings.vorschlag.json` und `CLAUDE.vorschlag.md` an.

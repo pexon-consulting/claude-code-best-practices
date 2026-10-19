@@ -2,7 +2,7 @@
 
 Den Token-Verbrauch von Claude Code siehst du mit `/usage` (Aliase `/cost` und `/stats`): Der Befehl zeigt Session-Kosten, Tokens je Modell, Cache-Treffer und bei Abos die Auslastung der Planlimits. Was den Kontext füllt, zeigt `/context`; senken lässt sich der Verbrauch vor allem mit `/clear` zwischen Aufgaben, einer kurzen CLAUDE.md, Skills und Regeln statt Dauertext, Subagents für große Ausgaben und dem passenden Modell und Effort.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -113,7 +113,7 @@ Sonnet erledigt laut Doku die meisten Programmieraufgaben gut und kostet weniger
 
 "Verbessere die Codebasis" löst breites Suchen aus. "Ergänze Eingabevalidierung in der Login-Funktion in auth.ts" führt zu wenigen gezielten Dateizugriffen.
 
-## Beispiele
+## Beispiele für Usage und Tokens
 
 ### Beispiel 1: Statuszeile mit Modell, Kosten und Kontext
 

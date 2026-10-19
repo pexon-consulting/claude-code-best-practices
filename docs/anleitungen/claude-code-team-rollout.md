@@ -1,8 +1,10 @@
 # Claude Code im Team: Rollout, Onboarding und gemeinsame Konfiguration
 
-Claude Code rollst du im Team einheitlich aus, indem du mit einem Pilot von 15-20 Entwicklern starten, allen dieselbe Basis geben (Managed Settings zentral, `.claude/settings.json`, Hooks und CLAUDE.md im Repo) und vor der Ausweitung messen, was der Pilot bringt und kostet. Die Freigabe durch IT-Sicherheit, Datenschutz, Legal und Betriebsrat läuft parallel zum Pilot, nicht danach. Diese Anleitung beschreibt Phasen, gemeinsame Basis, Onboarding und Kennzahlen.
+Claude Code rollst du im Team einheitlich aus, indem du mit einem Pilot von 15-20 Entwicklern startest, allen dieselbe Basis gibst (Managed Settings zentral, `.claude/settings.json`, Hooks und CLAUDE.md im Repo) und vor der Ausweitung misst, was der Pilot bringt und kostet. Die Freigabe durch IT-Sicherheit, Datenschutz, Legal und Betriebsrat läuft parallel zum Pilot, nicht danach. Diese Anleitung beschreibt Phasen, gemeinsame Basis, Onboarding und Kennzahlen.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -10,7 +12,7 @@ Claude Code rollst du im Team einheitlich aus, indem du mit einem Pilot von 15-2
 - Die gemeinsame Basis besteht aus drei Ebenen: Managed Settings für Unternehmensregeln, `.claude/settings.json` und Hooks je Repo, CLAUDE.md für Projektwissen.
 - `claude-team einrichten` legt die Repo-Basis an, das Plugin `team-basis` bringt Hooks und Skills auf jeden Rechner, `claude-team audit` prüft beides in CI.
 - Die Freigabe-Unterlagen (Pilotplan, Freigabe-Paket, TOM, DSFA, Betriebsrat, Kosten) liegen als Vorlagen unter [docs/rollout](../rollout/README.md).
-- Die Doku nennt als Richtwert für Unternehmen rund 13 USD je Entwickler und aktivem Tag; miss im Pilot deine eigene Basis.
+- Die Doku nennt als Richtwert für Unternehmen rund 13 US-Dollar je Entwickler und aktivem Tag; miss im Pilot deine eigene Basis.
 - Ohne Schulung und gemeinsame Regeln entstehen Insellösungen; plane Onboarding und einen festen Ansprechpartner ein.
 
 ## Wie läuft ein Claude-Code-Rollout ab?
@@ -43,13 +45,13 @@ Die Kostendoku empfiehlt ausdrücklich, mit einer kleinen Pilotgruppe zu starten
 | Rechner | Plugin `team-basis` mit Schutz-Hooks und Skills | Plattform-Team | `claude plugin install team-basis@claude-code-best-practices` |
 | Repo | `.claude/settings.json`, Hooks, `.claude/schutz.json`, Regeln, Subagents | Team | `claude-team einrichten` |
 | Projektwissen | CLAUDE.md mit Befehlen und Konventionen | Team | `claude-team einrichten`, `/init` |
-| Prüfung | Audit in CI | Team, Plattform-Team | GitHub Action `pexon-consulting/claude-code-best-practices@v0.1.0` |
+| Prüfung | Audit in CI | Team, Plattform-Team | GitHub Action `pexon-consulting/claude-code-best-practices@v0.2.0` |
 
 ### Repo-Basis mit claude-team einrichten
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten .
 ```
 
 Der Befehl legt CLAUDE.md (mit erkannten Befehlen aus `package.json`, `pyproject.toml` oder `Makefile`), `.claude/settings.json`, Hooks, `.claude/schutz.json`, Regeln, Agents, Skills und `.mcp.json.example` an. Er überschreibt nie: Bei vorhandener settings.json entsteht `.claude/settings.vorschlag.json`, bei vorhandener CLAUDE.md `CLAUDE.vorschlag.md`. Mit `--profil streng` sperrt er zusätzlich WebFetch, WebSearch, `curl`, `wget`, `nc`, `scp` und `ssh`.
@@ -61,7 +63,7 @@ claude plugin marketplace add pexon-consulting/claude-code-best-practices
 claude plugin install team-basis@claude-code-best-practices
 ```
 
-Zentral geht es über `extraKnownMarketplaces` und `enabledPlugins` in den Managed Settings. Ein Plugin, das dort auf `false` steht, ist auf allen Ebenen gesperrt.
+Zentral geht es über `extraKnownMarketplaces` und `enabledPlugins` in den Managed Settings. Ein Plugin, das dort auf `false` steht, ist auf allen Ebenen gesperrt. Für die zentrale Verteilung forkst du das Repo in die eigene Organisation, prüfst den Fork und pinnst ihn auf einen Tag, statt das öffentliche Repo direkt einzutragen. Plugins führen Hooks auf jedem Rechner aus.
 
 ```json
 {
@@ -69,7 +71,8 @@ Zentral geht es über `extraKnownMarketplaces` und `enabledPlugins` in den Manag
     "claude-code-best-practices": {
       "source": {
         "source": "github",
-        "repo": "pexon-consulting/claude-code-best-practices"
+        "repo": "your-org/claude-code-best-practices",
+        "ref": "v0.2.0"
       }
     }
   },
@@ -135,13 +138,13 @@ OpenTelemetry-Metriken enthalten `user.email`, sobald verfügbar. Kennzahlen je 
 
 Als Vergleichswert nennt die Doku: "Across enterprise deployments, the average cost is around $13 per developer per active day and $150-250 per developer per month, with costs remaining below $30 per active day for 90% of users." ([Costs](https://code.claude.com/docs/en/costs), abgerufen 15.10.2026). Deine eigenen Werte hängen von Modell, Aufgaben und Kontextgröße ab.
 
-## Beispiele
+## Beispiele für den Rollout im Team
 
 ### Beispiel 1: Audit aller Pilot-Repos lokal
 
 ```bash
 for repo in ~/code/service-a ~/code/frontend ~/code/infra; do
-  uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit "$repo" --format text
+  uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit "$repo" --format text
 done
 ```
 
@@ -157,7 +160,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v6
-      - uses: pexon-consulting/claude-code-best-practices@v0.1.0
+      - uses: pexon-consulting/claude-code-best-practices@v0.2.0
         with:
           schwelle: fehler
 ```
@@ -192,7 +195,7 @@ Für Regeln, die in jedem Repo gelten sollen, ohne dass jedes Team sie kopiert.
 ### Beispiel 5: Teams mit eigenen Repos auf den Vorschlag prüfen lassen
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --ohne claude-md,agents
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --ohne claude-md,agents
 git diff --no-index .claude/settings.json .claude/settings.vorschlag.json
 ```
 
@@ -234,7 +237,7 @@ Für Repos, die schon eine settings.json haben; der Vorschlag führt beides zusa
 
 ### Was kostet Claude Code im Team?
 
-Die Doku nennt als Durchschnitt in Unternehmen rund 13 USD je Entwickler und aktivem Tag und 150-250 USD je Entwickler und Monat. Deine Werte misst du im Pilot; Budgets regelt die [Kostenrichtlinie](../rollout/kostenrichtlinie.md).
+Die Doku nennt als Durchschnitt in Unternehmen rund 13 US-Dollar je Entwickler und aktivem Tag und 150-250 US-Dollar je Entwickler und Monat. Deine Werte misst du im Pilot; Budgets regelt die [Kostenrichtlinie](../rollout/kostenrichtlinie.md).
 
 ### Wie verteile ich dieselbe Konfiguration an alle?
 
@@ -252,3 +255,5 @@ Ob und in welchem Umfang Mitbestimmung besteht, klärst du mit Personalabteilung
 - [Claude Code Kosten](./claude-code-kosten.md)
 - [CLAUDE.md](./claude-md.md)
 - Rollout-Unterlagen: [Übersicht](../rollout/README.md), [Pilotplan](../rollout/pilotplan.md), [Freigabe-Paket](../rollout/freigabe-paket.md)
+- [Claude Code vs Codex und Cursor: Unterschiede für Teams](./claude-code-vs-codex-cursor.md)
+- [Claude Code Review: automatische Reviews mit GitHub Actions](./claude-code-review-github-actions.md)

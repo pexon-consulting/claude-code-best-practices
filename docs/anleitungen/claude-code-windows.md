@@ -2,7 +2,7 @@
 
 Claude Code läuft nativ unter Windows 10 1809+ und Windows Server 2019+, du brauchst also kein WSL: `irm https://claude.ai/install.ps1 | iex` in PowerShell genügt, ohne Administratorrechte. Git for Windows ist optional, liefert aber Git Bash für das Bash-Tool; ohne Git Bash führt Claude Code Befehle über das PowerShell-Tool aus. WSL 2 brauchst du nur, wenn du Linux-Toolchains nutzt oder die eingebaute Sandbox willst, denn die läuft unter nativem Windows nicht.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -40,7 +40,7 @@ Ohne gesetzte Variable sucht Claude Code `bash.exe` zuerst in `C:\Program Files\
 
 Mit `CLAUDE_CODE_USE_POWERSHELL_TOOL=0` schaltest du das PowerShell-Tool aus. Auf Linux, macOS und WSL kannst du es mit `1` einschalten, dann muss `pwsh` im PATH liegen.
 
-## Beispiele
+## Beispiele für Claude Code unter Windows
 
 ### Beispiel 1: Native Installation in PowerShell
 
@@ -165,7 +165,7 @@ Danach das Terminal neu starten. Läuft das Terminal in einem Editor, musst du d
 8. **Projekt-Basis anlegen.** Mit `claude-team einrichten` bekommt das Repo CLAUDE.md, `.claude/settings.json` und Schutz-Hooks:
 
    ```powershell
-   uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team einrichten . --dry-run
+   uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team einrichten . --dry-run
    ```
 
    Die Hooks der Vorlage starten mit `python3`. Prüfe unter Windows, dass `python3` im PATH liegt, sonst laufen sie nicht.
@@ -264,4 +264,5 @@ Windows 10 ab Version 1809 oder Windows Server 2019 und neuer, jeweils 64 Bit, m
 - [Claude Code Enterprise: Managed Settings](./claude-code-enterprise.md)
 - [Claude Code settings.json](./claude-code-settings-json.md)
 - [Prüfregeln, z.B. CC012 zu bypassPermissions](../regeln.md#cc012)
+- [Claude Code Tutorial auf Deutsch: die erste Stunde mit Claude Code](./claude-code-tutorial-deutsch.md)
 - Offizielle Doku: [Set up on Windows](https://code.claude.com/docs/en/setup#set-up-on-windows), [Troubleshoot installation](https://code.claude.com/docs/en/troubleshoot-install), [Managed settings](https://code.claude.com/docs/en/managed-settings)

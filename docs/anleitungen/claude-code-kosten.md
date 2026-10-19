@@ -1,8 +1,8 @@
 # Claude Code Kosten: Abo oder API, Budgets und Limits im Team
 
-Was Claude Code pro Entwickler kostet, hängt von Modellwahl, Größe der Codebasis und Arbeitsweise ab; laut offizieller Kosten-Doku liegen die Kosten in Unternehmensumgebungen im Schnitt bei etwa 13 US-Dollar pro Entwickler und aktivem Tag und 150-250 US-Dollar pro Entwickler und Monat, bei 90 % der Nutzer unter 30 US-Dollar pro aktivem Tag. Abgerechnet wird je nach Zugang über ein Abo mit Kontingent pro Sitz, nach Tokens über die Claude API oder nach Tokens über Bedrock, Vertex AI oder Foundry. Gegen Ausreißer helfen Budgets: Spend Limits im Abo, Workspace-Limits in der Console, Gateway-Budgets, `--max-budget-usd` für automatisierte Läufe und feste Modelle.
+Was Claude Code pro Entwickler kostet, hängt von Modellwahl, Größe der Codebasis und Arbeitsweise ab. Laut offizieller Kosten-Doku liegen die Kosten in Unternehmen im Schnitt bei etwa 13 US-Dollar pro Entwickler und aktivem Tag und bei 150-250 US-Dollar im Monat; 90 % der Nutzer bleiben unter 30 US-Dollar pro aktivem Tag. Abgerechnet wird je nach Zugang über ein Abo mit Kontingent pro Sitz, nach Tokens über die Claude API oder nach Tokens über Bedrock, Vertex AI oder Foundry. Gegen Ausreißer helfen Budgets: Spend Limits im Abo, Workspace-Limits in der Console, Gateway-Budgets, `--max-budget-usd` für automatisierte Läufe und feste Modelle.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -11,7 +11,7 @@ Was Claude Code pro Entwickler kostet, hängt von Modellwahl, Größe der Codeba
 - Team und Enterprise rechnen über ein Kontingent pro Sitz ab, das sich in einem rollierenden 5-Stunden-Fenster und wöchentlich erneuert; darüber hinaus geht es nur mit Usage Credits und Spend Limits.
 - Über die Claude Console und über Cloud-Anbieter wird pro Token abgerechnet; dort deckeln Workspace-Limits, Cloud-Budgets oder ein Gateway die Ausgaben.
 - Die teuersten Gewohnheiten sind lange Sitzungen ohne `/clear` und Opus als Default; feste Modelle pro Rolle senken die Kosten am stärksten.
-- Ohne Leitplanken sind einzelne Ausreißer teuer: Aus der Praxis werden Fälle von bis zu 10.000 EUR zusätzlichen Token-Kosten pro Entwickler und Monat berichtet.
+- Ohne Leitplanken können einzelne Ausreißer ein Vielfaches des Durchschnitts kosten, etwa durch lange Sitzungen, Agent Teams oder fehlerhafte Automatisierung; deshalb gehören Spend Limits und `--max-budget-usd` von Anfang an dazu.
 
 ## Was kostet Claude Code pro Entwickler?
 
@@ -82,7 +82,7 @@ Mit `availableModels` in Managed Settings schränkst du die wählbaren Modelle e
 
 Standardmäßig rechnet Claude Code alle angezeigten Beträge zum Listenpreis. Wer andere Konditionen hat, hinterlegt ab v2.1.242 in Managed Settings den Key `modelPricing` mit den Sätzen aus dem Vertrag. Das ändert nur die Anzeige in `/usage`, Statuszeile und OpenTelemetry, nicht die Abrechnung. In Nutzer- oder Projekt-Settings wird der Key ignoriert.
 
-## Beispiele
+## Beispiele für Kostengrenzen
 
 ### Beispiel 1: Modelle für das Team festlegen (Managed Settings)
 
@@ -223,3 +223,4 @@ Bei Team und Enterprise im Spend Report der Org-Analytics, bei der API im Consol
 - [Claude Code Enterprise](./claude-code-enterprise.md)
 - [Claude Code Team-Rollout](./claude-code-team-rollout.md)
 - Vorlage: [Kostenrichtlinie](../rollout/kostenrichtlinie.md)
+- [Claude Code Statusline: Modell, Kontext und Kosten in der Statuszeile anzeigen](./claude-code-statusline.md)

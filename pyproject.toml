@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "claude-code-best-practices"
-version = "0.1.0"
+version = "0.2.0"
 description = "Claude Code Best Practices für Teams: Prüf-CLI, getestete Hooks gegen Secrets und deutsche personenbezogene Daten, Vorlagen für CLAUDE.md und settings.json."
 readme = "README.md"
 license = "MIT"

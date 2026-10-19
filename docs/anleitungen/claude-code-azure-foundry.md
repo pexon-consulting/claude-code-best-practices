@@ -1,8 +1,10 @@
 # Claude Code Azure: Claude Code über Microsoft Foundry nutzen
 
-Ja, Claude Code läuft über Microsoft Azure Foundry: Du legst im [Foundry-Portal](https://ai.azure.com/) eine Ressource mit Deployments für Opus, Sonnet und Haiku an, setzt `CLAUDE_CODE_USE_FOUNDRY=1` und `ANTHROPIC_FOUNDRY_RESOURCE` mit dem Ressourcennamen und meldest dich per `az login` (Entra ID) oder API-Key an. Anders als bei Bedrock und Vertex AI gibt es keinen Einrichtungsassistenten und keine Modellprüfung beim Start, deshalb musst du die Modelle mit den Namen deiner Deployments pinnen. Ob die Anfragen in Azure bleiben, entscheidet die Hosting-Option des Deployments.
+Ja, Claude Code läuft über Microsoft Foundry (Azure): Du legst im [Foundry-Portal](https://ai.azure.com/) eine Ressource mit Deployments für Opus, Sonnet und Haiku an, setzt `CLAUDE_CODE_USE_FOUNDRY=1` und `ANTHROPIC_FOUNDRY_RESOURCE` mit dem Ressourcennamen und meldest dich per `az login` (Entra ID) oder API-Key an. Anders als bei Bedrock und Vertex AI gibt es keinen Einrichtungsassistenten und keine Modellprüfung beim Start, deshalb musst du die Modelle mit den Namen deiner Deployments pinnen. Ob die Anfragen in Azure bleiben, entscheidet die Hosting-Option des Deployments.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -34,7 +36,7 @@ Ja, Claude Code läuft über Microsoft Azure Foundry: Du legst im [Foundry-Porta
 
 Die Verbindung läuft über TLS 1.2+. Die Hosting-Optionen beschreibt Anthropic auf der [Plattform-Doku zu Foundry](https://platform.claude.com/docs/en/build-with-claude/claude-in-microsoft-foundry#hosting-options). Welche Azure-Regionen Claude anbieten, steht nicht in der Claude-Code-Doku; das prüfst du im Foundry-Portal. Verträge, Auftragsverarbeitung und Speicherorte klärst du mit dem Datenschutzbeauftragten, siehe [Claude Code und DSGVO](./claude-code-dsgvo.md).
 
-## Beispiele
+## Beispiele für Claude Code mit Microsoft Foundry
 
 ### Beispiel 1: Minimal-Setup mit Entra ID
 

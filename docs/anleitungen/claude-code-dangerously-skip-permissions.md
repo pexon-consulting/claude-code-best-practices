@@ -2,7 +2,7 @@
 
 `claude --dangerously-skip-permissions` startet Claude Code im Modus `bypassPermissions`: Claude führt jeden Werkzeugaufruf sofort aus, ohne Rückfrage und ohne die meisten Sicherheitsprüfungen, auch Schreibzugriffe auf `.git` oder `.claude`. Vertretbar ist das laut Anthropic nur in isolierten Umgebungen wie Containern, VMs oder Dev Containern, in denen Claude Code keinen Schaden anrichten kann, also ohne Zugangsdaten vom Host, als normaler Nutzer statt root und mit begrenztem Netz. Für weniger Rückfragen auf dem eigenen Rechner ist Auto Mode die vorgesehene Alternative.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -73,7 +73,7 @@ Nicht vertretbar: der eigene Laptop mit Zugriff auf Mails, Passwortmanager und K
 
 Auto Mode ist ab v2.1.283 im Terminal und in VS Code der eingebaute Start-Modus, wenn das Modell ihn unterstützt. Wer das Flag nur nutzt, weil die Rückfragen nerven, ist dort meist besser aufgehoben.
 
-## Beispiele
+## Beispiele für `--dangerously-skip-permissions`
 
 ### Beispiel 1: Dev Container mit Claude Code als normaler Nutzer
 

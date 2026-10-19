@@ -2,7 +2,7 @@
 
 Claude Code Permissions legst du in der settings.json mit drei Listen fest: `allow` erlaubt einen Befehl dauerhaft ohne Rückfrage, `ask` fragt immer nach und `deny` verbietet ihn. Geprüft wird immer in der Reihenfolge deny, dann ask, dann allow, und die erste passende Regel entscheidet. Wie viel Claude ohne Rückfrage tun darf, bestimmst du zusätzlich mit dem Permission Mode, etwa Auto Mode oder acceptEdits.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -137,7 +137,7 @@ In jedem Modus gilt: `ask`-Regeln werden nie automatisch freigegeben, `deny`-Reg
 
 Auto Mode und Bypass lassen sich organisationsweit sperren: `permissions.disableAutoMode: "disable"` und `permissions.disableBypassPermissionsMode: "disable"`, am besten in den Managed Settings.
 
-## Beispiele
+## Beispiele für Permissions in typischen Projekten
 
 ### Beispiel 1: Node-Projekt mit Tests und Lint
 
@@ -163,6 +163,8 @@ Routinebefehle ohne Rückfrage, Veröffentlichen mit Rückfrage.
   }
 }
 ```
+
+Testbefehle wie `pytest` oder `npm run test` führen Code aus dem Repo aus: `pytest` lädt `conftest.py`, `npm run test` startet ein Skript aus `package.json`. Nimm sie nur in die Allow-Liste auf, wenn Änderungen an diesen Dateien und an Testdateien weiter einzeln bestätigt werden, also nicht zusammen mit `acceptEdits` und nicht in fremden Repos. Die Vorlage von `claude-team einrichten` erlaubt deshalb keine Testbefehle. Auch `git diff` und `git log` sind nicht rein lesend: Mit `--output=<datei>` schreiben sie Dateien. Die Vorlage sperrt das mit `Bash(git diff *--output*)` und `Bash(git log *--output*)` in `deny`.
 
 ### Beispiel 3: Cloud-Zugangsdaten im Home-Ordner sperren
 

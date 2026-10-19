@@ -2,7 +2,7 @@
 
 Richtlinie für Budget, Modellwahl, Grenzen und Überwachung der Kosten von Claude Code. Sie legt fest, wer wie viel ausgeben darf, wie die Grenzen technisch gesetzt werden und was bei Überschreitung passiert.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 | Feld | Eintrag |
 | --- | --- |

@@ -1,5 +1,5 @@
 name: Claude Code Audit
-description: Prüft CLAUDE.md, settings.json, Hooks, MCP und Git auf 35 Regeln. Optional als SARIF für GitHub Code Scanning.
+description: Prüft CLAUDE.md, settings.json, Hooks, MCP und Git auf 36 Regeln. Optional als SARIF für GitHub Code Scanning.
 author: Pexon Consulting GmbH
 branding:
   icon: shield

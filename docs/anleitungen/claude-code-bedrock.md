@@ -1,8 +1,10 @@
 # Claude Code Bedrock: Claude Code über Amazon Bedrock in der EU betreiben
 
-Claude Code für Amazon Bedrock in einer EU-Region konfigurierst du mit zwei Umgebungsvariablen: `CLAUDE_CODE_USE_BEDROCK=1` und `AWS_REGION=eu-central-1` (oder eine andere `eu-*`-Region), dazu gültige AWS-Zugangsdaten über Profil, SSO oder einen Bedrock-API-Key. In einer `eu-*`-Region wählt Claude Code automatisch die Cross-Region-Inference-Profile mit dem Präfix `eu.`, ab v2.1.224 kannst du das mit `ANTHROPIC_BEDROCK_REGION_PREFIX=eu` festschreiben. Für Teams pinnst du außerdem die Modellversionen und verteilst alles zentral über Managed Settings.
+Claude Code für Amazon Bedrock in einer EU-Region konfigurierst du mit zwei Umgebungsvariablen: `CLAUDE_CODE_USE_BEDROCK=1` und `AWS_REGION=eu-central-1` (oder eine andere `eu-*`-Region), dazu gültige AWS-Zugangsdaten über Profil, SSO oder einen Bedrock-API-Key. In einer `eu-*`-Region wählt Claude Code bevorzugt die Cross-Region-Inference-Profile mit dem Präfix `eu.`, ab v2.1.224 kannst du das mit `ANTHROPIC_BEDROCK_REGION_PREFIX=eu` vorgeben. Laut Doku ist das eine Präferenz, keine Garantie: Fehlt ein `eu.`-Profil, kann Claude Code auf ein anderes ausweichen. Für Teams pinnst du außerdem die Modellversionen und verteilst alles zentral über Managed Settings.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -36,7 +38,7 @@ Mit Bedrock laufen Prompts und Antworten über dein AWS-Konto. Einige Nebenverbi
 
 Das Development Partner Program von Anthropic gibt es für Bedrock nicht. Welche Verträge, Auftragsverarbeitung und Speicherorte für die Daten deines Unternehmens bei AWS gelten, klärst du mit dem Datenschutzbeauftragten. Mehr dazu in [Claude Code und DSGVO](./claude-code-dsgvo.md).
 
-## Beispiele
+## Beispiele für Claude Code mit Bedrock
 
 ### Beispiel 1: Minimal-Setup in der Shell für Frankfurt
 
@@ -133,7 +135,17 @@ Die Policy aus der [Bedrock-Doku](https://code.claude.com/docs/en/amazon-bedrock
 }
 ```
 
-Für engere Rechte begrenzt du `Resource` auf die ARNs bestimmter Inference-Profile, zum Beispiel nur `arn:aws:bedrock:eu-central-1:<konto-id>:inference-profile/*`. Die Doku empfiehlt ein eigenes AWS-Konto für Claude Code, damit Kosten und Zugriffe getrennt bleiben.
+Die Policy erlaubt alle Regionen. Soll die Verarbeitung belastbar in der EU bleiben, reicht das Präfix allein nicht. Dann begrenzt du `Resource` auf EU-Regionen und `eu.`-Profile; ein `global.`- oder `us.`-Profil scheitert so an IAM statt still zu laufen:
+
+```json
+"Resource": [
+  "arn:aws:bedrock:eu-*:<konto-id>:inference-profile/eu.*",
+  "arn:aws:bedrock:eu-*:<konto-id>:application-inference-profile/*",
+  "arn:aws:bedrock:eu-*::foundation-model/*"
+]
+```
+
+Zusätzlich pinnst du die Modelle auf `eu.`-IDs (Beispiel 3) und beschränkst `availableModels` auf diese IDs. Die Doku empfiehlt ein eigenes AWS-Konto für Claude Code, damit Kosten und Zugriffe getrennt bleiben.
 
 ### Beispiel 5: Team-Setup über Managed Settings
 
@@ -240,7 +252,7 @@ Welche Werte verworfen wurden, zeigt `claude --debug`. Die vollständige Liste s
 
 ### Bleiben meine Daten mit Bedrock in der EU?
 
-Prompts und Antworten gehen an Bedrock in der Region, die du einstellst, über das Inference-Profil mit dem Präfix `eu.`. Wohin Bedrock ein Cross-Region-Profil innerhalb von AWS routet, beschreibt die AWS-Doku zu Inference-Profilen. Kleine Nebenverbindungen wie die Hostname-Prüfung von WebFetch gehen an `api.anthropic.com`, siehe Tabelle oben. Ob das für dein Unternehmen reicht, klärst du mit dem Datenschutzbeauftragten.
+Nicht automatisch. Prompts und Antworten gehen an Bedrock über das Inference-Profil, das Claude Code wählt. Das Präfix `eu.` ist dabei nur eine Präferenz; erst gepinnte `eu.`-Modell-IDs und eine IAM-Policy, die nur EU-Regionen und `eu.`-Profile erlaubt (Beispiel 4), machen daraus eine feste Grenze. Wohin Bedrock ein Cross-Region-Profil innerhalb von AWS routet, beschreibt die AWS-Doku zu Inference-Profilen. Kleine Nebenverbindungen wie die Hostname-Prüfung von WebFetch gehen an `api.anthropic.com`, siehe Tabelle oben. Ob das für dein Unternehmen reicht, klärst du mit dem Datenschutzbeauftragten.
 
 ### Brauche ich ein Anthropic-Konto für Claude Code auf Bedrock?
 
@@ -266,7 +278,7 @@ Du zahlst die Bedrock-Preise je Token an AWS, Anthropic nennt dafür keine eigen
 
 - [Claude Code und DSGVO](./claude-code-dsgvo.md)
 - [Claude Code LLM-Gateway](./claude-code-llm-gateway.md)
-- [Claude Code Vertex AI](./claude-code-vertex-ai.md) und [Claude Code Azure Foundry](./claude-code-azure-foundry.md)
+- [Claude Code Vertex AI](./claude-code-vertex-ai.md) und [Claude Code mit Microsoft Foundry (Azure)](./claude-code-azure-foundry.md)
 - [Claude Code Enterprise: Managed Settings](./claude-code-enterprise.md)
 - [Claude Code settings.json](./claude-code-settings-json.md)
 - Offizielle Doku: [Amazon Bedrock](https://code.claude.com/docs/en/amazon-bedrock), [Data usage](https://code.claude.com/docs/en/data-usage), [Settings reference](https://code.claude.com/docs/en/settings-reference)

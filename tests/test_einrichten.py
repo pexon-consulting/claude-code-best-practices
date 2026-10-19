@@ -113,6 +113,22 @@ def test_vorlage_ist_gueltiges_json():
         json.loads((VORLAGE / datei).read_text(encoding="utf-8"))
 
 
+def test_allow_liste_fuehrt_keinen_projektcode_aus():
+    allow = settings_daten("standard")["permissions"]["allow"]
+    for befehl in ("pytest", "python -m pytest", "npm run", "npm test", "make", "cargo test", "go test"):
+        assert not any(r.startswith(f"Bash({befehl}") for r in allow), befehl
+    deny = settings_daten("standard")["permissions"]["deny"]
+    assert "Bash(git diff *--output*)" in deny and "Bash(git log *--output*)" in deny
+
+
+def test_plugin_findet_agents_im_standardordner():
+    wurzel = VORLAGE.parents[2]
+    manifest = json.loads((wurzel / ".claude-plugin" / "plugin.json").read_text(encoding="utf-8"))
+    assert "agents" not in manifest, "eine agents-Liste ersetzt den Standardordner agents/"
+    for quelle in (VORLAGE / ".claude" / "agents").glob("*.md"):
+        assert (wurzel / "agents" / quelle.name).read_text(encoding="utf-8") == quelle.read_text(encoding="utf-8")
+
+
 def test_zusammenfuehren_behaelt_werte():
     assert zusammenfuehren({"a": 1, "l": [1]}, {"a": 2, "b": 3, "l": [1, 2]}) == {"a": 1, "b": 3, "l": [1, 2]}
 

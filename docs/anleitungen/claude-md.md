@@ -2,7 +2,7 @@
 
 Eine CLAUDE.md ist eine Markdown-Datei im Projekt, die Claude Code zu Beginn jeder Sitzung liest: Sie enthält Build- und Testbefehle, Konventionen, den Projektaufbau und feste Regeln, die Claude sonst jedes Mal neu erklärt bekommen müsste. Anthropic empfiehlt, jede CLAUDE.md unter 200 Zeilen zu halten, weil lange Dateien Kontext kosten und schlechter befolgt werden. Alles, was nur für einen Teil des Codes gilt, gehört in `.claude/rules/`, alles, was zwingend passieren muss, in einen Hook.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -124,7 +124,7 @@ Früher speicherte eine Zeile, die mit `#` begann, eine Notiz direkt in die CLAU
 - "add this to CLAUDE.md" lässt Claude die CLAUDE.md bearbeiten.
 - `/memory` öffnet die Datei im Editor.
 
-## Beispiele
+## Beispiele für CLAUDE.md
 
 Alle Beispiele sind vollständige Dateien. Passe Befehle und Pfade an dein Projekt an.
 
@@ -167,7 +167,7 @@ uv run uvicorn app.main:app --reload   # lokal starten
 ## Grenzen
 
 - Migrationen nur als neue Revision: `uv run alembic revision -m "..."`. Nie eine bestehende Revision ändern.
-- Keine echten Kundendaten in Tests. Muster-IBAN `DE89 3704 0044 0532 0130 00`, Mails an `@example.com`.
+- Keine echten Kundendaten in Tests. Beispiel-IBAN `DE89 3704 0044 0532 0130 00`, Mails an `@example.com`.
 - Keine neue Abhängigkeit ohne Rückfrage.
 
 ## Fallen
@@ -356,7 +356,7 @@ Für IT-Abteilungen, die eine Anweisung auf alle Rechner verteilen. Der Key `cla
 9. Mit dem Prüf-CLI testen:
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit .
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .
 ```
 
 Wer bei null anfängt, nimmt die [Vorlage aus diesem Repo](../../src/claude_team/vorlage/CLAUDE.md). `claude-team einrichten . --dry-run` zeigt, was angelegt würde, und füllt die Befehle aus `package.json`, `pyproject.toml` oder `Makefile`. Eine vorhandene CLAUDE.md wird nie überschrieben, stattdessen entsteht `CLAUDE.vorschlag.md`.
@@ -418,5 +418,5 @@ Beides funktioniert, die Doku schreibt dazu keine Sprache vor. Wichtiger ist ein
 - [Claude Code Memory: Kontext, /compact und Sitzungen](./claude-code-memory.md)
 - [Claude Code settings.json mit Team-Vorlage](./claude-code-settings-json.md)
 - [Claude Code Skills](./claude-code-skills.md)
-- Vorlage: [CLAUDE.md](../../src/claude_team/vorlage/CLAUDE.md), Prüfregeln: [CC001 bis CC006](../regeln.md#cc001)
+- Vorlage: [CLAUDE.md](../../src/claude_team/vorlage/CLAUDE.md), Prüfregeln: [CC001 bis CC007](../regeln.md#cc001)
 - Offizielle Doku: [How Claude remembers your project](https://code.claude.com/docs/en/memory)

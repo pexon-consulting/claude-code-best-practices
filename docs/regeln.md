@@ -2,7 +2,7 @@
 
 > Stand: 15.10.2026, geprüft gegen Claude Code 2.1.294 und die offizielle Doku unter [code.claude.com/docs](https://code.claude.com/docs/en/overview).
 
-`claude-team audit` prüft ein Repository auf 35 Regeln in sechs Bereichen: CLAUDE.md, settings.json, Hooks, Secrets, MCP, Subagents und Skills, Git. Jede Regel hat eine feste ID. Die Meldungen im Terminal, im Markdown- und im SARIF-Bericht verlinken direkt auf den Abschnitt hier.
+`claude-team audit` prüft ein Repository auf 36 Regeln in sieben Bereichen: CLAUDE.md, settings.json, Hooks, Secrets, MCP, Subagents und Skills, Git. Jede Regel hat eine feste ID. Die Meldungen im Terminal, im Markdown- und im SARIF-Bericht verlinken direkt auf den Abschnitt hier.
 
 ```bash
 claude-team audit .                      # Text, Exit 1 bei Fehlern
@@ -23,6 +23,7 @@ claude-team regeln                       # alle Regeln als Liste
 | [CC004](#cc004) | fehler | @-Import zeigt auf fehlende Datei |
 | [CC005](#cc005) | fehler | CLAUDE.local.md nicht in .gitignore |
 | [CC006](#cc006) | hinweis | AGENTS.md wird neben CLAUDE.md nicht gelesen |
+| [CC007](#cc007) | hinweis | Platzhalter {{...}} in CLAUDE.md nicht ausgefüllt |
 | [CC010](#cc010) | fehler | settings.json ist kein gültiges JSON |
 | [CC011](#cc011) | fehler | settings.local.json im Repo |
 | [CC012](#cc012) | fehler | bypassPermissions als Standard oder nicht gesperrt |
@@ -134,6 +135,15 @@ Seit Claude Code 2.1.277 liest Claude Code `AGENTS.md` nur, wenn es keine CLAUDE
 
 **Lösung:** In CLAUDE.md eine Zeile `@AGENTS.md` aufnehmen. Dann pflegt das Team die gemeinsamen Regeln an einer Stelle. Anleitung: [AGENTS.md und CLAUDE.md](anleitungen/agents-md.md).
 
+<a id="cc007"></a>
+### CC007: Platzhalter {{...}} in CLAUDE.md nicht ausgefüllt
+
+**Stufe:** hinweis
+
+`claude-team einrichten` setzt erkannte Befehle in die CLAUDE.md ein. Was es nicht erkennt, bleibt als Platzhalter stehen, etwa `{{EIN_SATZ_WAS_DAS_PROJEKT_TUT}}`, `{{LINT}}` oder `{{START}}`. Claude liest den Platzhalter wörtlich und rät dann.
+
+**Lösung:** Jeden Platzhalter durch den echten Wert ersetzen oder die Zeile löschen. Platzhalter in Codeblöcken zählen nicht.
+
 ---
 
 ## settings.json
@@ -229,7 +239,7 @@ Private Schlüssel, Zertifikate und Terraform-State enthalten oft Zugangsdaten. 
 ```json
 {
   "permissions": {
-    "allow": ["Bash(git status *)", "Bash(git diff *)", "Bash(npm run test *)", "Bash(pytest *)"]
+    "allow": ["Bash(git status *)", "Bash(git diff *)", "Bash(npm run lint)", "Bash(ruff check *)"]
   }
 }
 ```
@@ -510,7 +520,7 @@ Der Protokoll-Hook der Vorlage schreibt unter `.claude/protokoll/` mit, welches 
 ## Regeln in der CI
 
 ```yaml
-- uses: pexon-consulting/claude-code-best-practices@v0.1.0
+- uses: pexon-consulting/claude-code-best-practices@v0.2.0
   with:
     schwelle: warnung
     sarif: true

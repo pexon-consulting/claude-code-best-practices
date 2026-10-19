@@ -15,6 +15,13 @@ def zaehle(befunde: list[Befund]) -> dict[str, int]:
     return {s: sum(b.schwere == s for b in befunde) for s in (FEHLER, WARNUNG, HINWEIS)}
 
 
+def summe(z: dict[str, int]) -> str:
+    """'2 Fehler, 1 Warnung, 3 Hinweise'."""
+    warnungen = "Warnung" if z[WARNUNG] == 1 else "Warnungen"
+    hinweise = "Hinweis" if z[HINWEIS] == 1 else "Hinweise"
+    return f"{z[FEHLER]} Fehler, {z[WARNUNG]} {warnungen}, {z[HINWEIS]} {hinweise}"
+
+
 def als_text(befunde: list[Befund], pfad: str) -> str:
     if not befunde:
         return f"{pfad}: keine Befunde.\n"
@@ -23,7 +30,7 @@ def als_text(befunde: list[Befund], pfad: str) -> str:
         ort = f"{b.datei}:{b.zeile}" if b.zeile else b.datei
         zeilen.append(f"{SYMBOL[b.schwere]} {b.regel} {ort}\n        {b.meldung}")
     z = zaehle(befunde)
-    zeilen.append(f"\n{z[FEHLER]} Fehler, {z[WARNUNG]} Warnungen, {z[HINWEIS]} Hinweise.")
+    zeilen.append(f"\n{summe(z)}.")
     return "\n".join(zeilen) + "\n"
 
 
@@ -32,7 +39,7 @@ def als_markdown(befunde: list[Befund], pfad: str) -> str:
     zeilen = [
         f"# Claude-Code-Prüfung: {pfad}",
         "",
-        f"{z[FEHLER]} Fehler, {z[WARNUNG]} Warnungen, {z[HINWEIS]} Hinweise. Geprüft mit claude-team {__version__}.",
+        f"{summe(z)}. Geprüft mit claude-team {__version__}.",
         "",
     ]
     if not befunde:

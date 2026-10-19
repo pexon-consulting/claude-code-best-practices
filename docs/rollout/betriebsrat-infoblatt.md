@@ -2,7 +2,9 @@
 
 Dieses Blatt informiert den Betriebsrat über den geplanten Einsatz von Claude Code: was das Werkzeug tut, welche Daten dabei anfallen und welche nicht, und welche Punkte gemeinsam zu klären sind.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Dieses Infoblatt ist eine Vorlage und keine Rechtsberatung. Es ersetzt weder eine Betriebsvereinbarung noch eine rechtliche Prüfung der Mitbestimmungsrechte. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 | Feld | Eintrag |
 | --- | --- |
@@ -32,7 +34,7 @@ Die Nutzung ist [freiwillig / Teil der Arbeitsmittel des Teams]. [Wer nicht teil
 | --- | --- | --- | --- | --- |
 | Lokaler Verlauf | Sitzungen im Klartext | Rechner der Person, `~/.claude/projects/` | die Person selbst | [x] Tage, dann automatisch gelöscht |
 | Modellanbieter | Anfragen und Antworten | [Anbieter, Region] | [Anbieter laut Vertrag] | [30 Tage / keine Speicherung mit Zero Data Retention] |
-| Hook-Protokoll der Team-Basis (falls aktiv) | Zeit, gekürzte Sitzungs-ID (8 Zeichen), Werkzeug, Dateiname, Befehl mit maskierten Tokens, Dauer | im Projektordner `.claude/protokoll/`, nicht im Git | [wer] | [x] Tage |
+| Hook-Protokoll der Team-Basis (standardmäßig aus) | Zeit, gekürzte Sitzungs-ID (8 Zeichen), Werkzeug, Dateiname, Befehl mit maskierten Tokens und Kennungen, Dauer | im Projektordner `.claude/protokoll/`, nicht im Git | [wer] | [x] Tage, Standard 30 (`aufbewahrung_tage`), danach automatisch gelöscht |
 | Abrechnung und Admin-Konsole | [Kosten und Nutzung je Person, siehe Abschnitt 4] | [Anthropic-Konsole / Cloud-Konto] | [Admins: Namen oder Rolle] | [laut Anbieter] |
 | OpenTelemetry (falls aktiv) | Sitzungen, Kosten, Tokens, Commits, Pull Requests, Codezeilen, aktive Zeit | eigener Server [Name] | [wer] | [x] Tage |
 
@@ -54,7 +56,7 @@ Offen gesagt, damit es gemeinsam geregelt werden kann:
 
 ## 6. Keine Absicht zur Leistungs- oder Verhaltenskontrolle
 
-[Firma] setzt Claude Code als Arbeitsmittel ein. Es ist nicht beabsichtigt, die Daten aus Abschnitt 3 und 5 zur Leistungs- oder Verhaltenskontrolle einzelner Beschäftigter zu nutzen. Auswertungen dienen [der Kostenkontrolle und der Bewertung des Werkzeugs auf Team-Ebene].
+[Firma] setzt Claude Code als Arbeitsmittel ein. Es ist nicht beabsichtigt, die Daten aus Abschnitt 3 und 5 zur Leistungs- oder Verhaltenskontrolle einzelner Beschäftigter zu nutzen. Auswertungen dienen [der Kostenkontrolle und der Bewertung des Werkzeugs auf Team-Ebene]. Für die Frage der Mitbestimmung kommt es nach der Rechtsprechung nicht auf diese Absicht an, sondern darauf, ob die Daten objektiv zur Überwachung geeignet sind; das ist in Abschnitt 7 zu klären.
 
 ## 7. Punkt zur Klärung: § 87 Abs. 1 Nr. 6 BetrVG
 

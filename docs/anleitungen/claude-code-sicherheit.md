@@ -2,7 +2,9 @@
 
 Claude Code Security heißt im Unternehmen: Der Agent arbeitet mit den Rechten des Entwicklers, also begrenzt du technisch, welche Dateien er lesen, welche Befehle er ausführen und welche Hosts er erreichen darf. Die wichtigsten Risiken sind Secrets im Kontext, Prompt Injection über Dateien, Webseiten und MCP-Server, zerstörerische Befehle, die Lieferkette von MCP-Servern und Datenabfluss über WebFetch oder `curl`. Dagegen helfen mehrere Schichten: deny-Regeln, Hooks, Sandbox mit Netz-Allowlist, Devcontainer, Managed Settings und Review.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
+
+Diese Anleitung erklärt Technik und Einstellungen. Sie ist keine Rechtsberatung. Datenschutz, Verträge und Mitbestimmung klärst du mit Datenschutzbeauftragtem, Rechtsabteilung und Betriebsrat. Angaben zu Regionen und Datenverarbeitung der Anbieter können sich ändern; maßgeblich sind deren aktuelle Dokumentation und Verträge.
 
 ## Das Wichtigste in Kürze
 
@@ -198,7 +200,7 @@ Das Basis-Image ist ein Beispiel; die Feature-ID stammt aus der Doku.
 
 `/security-review` analysiert die Änderungen des aktuellen Branches gegen den Default-Branch von `origin` auf Schwachstellen wie Injection, Authentifizierungsfehler und Datenoffenlegung. Der Befehl braucht ein `origin`-Remote. Für Pull Requests gibt es von Anthropic die GitHub Action `anthropics/claude-code-security-review`; Details stehen in deren Repository. Ein Review findet Fehler im erzeugten Code, ersetzt aber keine Sperre in der Konfiguration.
 
-## Beispiele
+## Beispiele für sichere Einstellungen
 
 ### Beispiel 1: Repo in CI gegen die Team-Basis prüfen
 
@@ -213,7 +215,7 @@ jobs:
       security-events: write
     steps:
       - uses: actions/checkout@v6
-      - uses: pexon-consulting/claude-code-best-practices@v0.1.0
+      - uses: pexon-consulting/claude-code-best-practices@v0.2.0
         with:
           pfad: .
           schwelle: fehler
@@ -225,7 +227,7 @@ Für jedes Repo mit Claude-Code-Konfiguration; Befunde erscheinen in GitHub Code
 ### Beispiel 2: Audit lokal als Markdown-Bericht
 
 ```bash
-uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.1.0 claude-team audit . --format markdown --out audit.md
+uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit . --format markdown --out audit.md
 ```
 
 Für die Freigabe durch die IT-Sicherheit, die einen lesbaren Bericht braucht.
@@ -283,7 +285,8 @@ Für CI-Jobs ohne Projekt-MCP-Server und mit Kostengrenze; `--permission-prompts
     "claude-code-best-practices": {
       "source": {
         "source": "github",
-        "repo": "pexon-consulting/claude-code-best-practices"
+        "repo": "your-org/claude-code-best-practices",
+        "ref": "v0.2.0"
       }
     }
   },
@@ -293,7 +296,7 @@ Für CI-Jobs ohne Projekt-MCP-Server und mit Kostengrenze; `--permission-prompts
 }
 ```
 
-Für Organisationen, die Hooks zentral über ein freigegebenes Plugin verteilen und alle anderen Hooks blocken wollen. Unter `allowManagedHooksOnly` laufen nur Managed Hooks und Hooks aus Plugins, die die Managed Settings per `enabledPlugins` erzwingen; Hooks aus Projekt-settings.json und Subagent-Frontmatter sind dann blockiert.
+Für Organisationen, die Hooks zentral über ein freigegebenes Plugin verteilen und alle anderen Hooks blocken wollen. `your-org/claude-code-best-practices` steht für einen geprüften Fork in der eigenen Organisation, gepinnt auf einen Tag; ein fremdes Repo ohne `ref` würde jede Änderung sofort auf alle Rechner bringen. Unter `allowManagedHooksOnly` laufen nur Managed Hooks und Hooks aus Plugins, die die Managed Settings per `enabledPlugins` erzwingen; Hooks aus Projekt-settings.json und Subagent-Frontmatter sind dann blockiert.
 
 ## Schritt für Schritt
 
@@ -348,3 +351,4 @@ Nein, die Sandbox isoliert nur Shell-Befehle. Read, Edit, WebFetch, Hooks und MC
 - [Claude Code MCP](./claude-code-mcp.md)
 - [Claude Code Enterprise](./claude-code-enterprise.md)
 - Vorlagen: [settings.json](../../src/claude_team/vorlage/.claude/settings.json), [schutz.json](../../src/claude_team/vorlage/.claude/schutz.json), [Freigabe-Paket](../rollout/freigabe-paket.md)
+- [Claude Code Review: automatische Reviews mit GitHub Actions](./claude-code-review-github-actions.md)

@@ -2,7 +2,7 @@
 
 Der Claude Code Workflow, den die offizielle Doku empfiehlt, hat vier Phasen: im Plan Mode erkunden, einen Plan schreiben lassen, umsetzen und gegen Tests prüfen, dann committen. Der wichtigste Einzelhebel ist, Claude eine Möglichkeit zu geben, die eigene Arbeit zu prüfen, etwa mit Tests, Screenshots oder einem Prüfbefehl. Dazu kommen kleine Schritte, `/clear` zwischen Aufgaben und Subagents für Recherche, damit der Kontext sauber bleibt.
 
-> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md).
+> Stand: 15.10.2026, geprüft mit Claude Code 2.1.294. Teil von [Claude Code Best Practices](../../README.md). Inoffizielles Projekt: Claude und Claude Code sind Marken von Anthropic PBC; dieses Projekt ist nicht mit Anthropic verbunden.
 
 ## Das Wichtigste in Kürze
 
@@ -94,7 +94,7 @@ Nutze einen Subagent, um diesen Code auf Randfälle zu prüfen.
 
 Für Pläne funktioniert ein Gegenreview: Ein Subagent liest PLAN.md und den Code und meldet nur Lücken, die beim Umsetzen wirklich etwas ändern. Mehr in [Claude Code Subagents](./claude-code-subagents.md).
 
-## Beispiele
+## Beispiele für den Claude-Code-Workflow
 
 ### Beispiel 1: Interview vor einer größeren Funktion
 
