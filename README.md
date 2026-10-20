@@ -581,4 +581,6 @@ Lizenz: [MIT](LICENSE). Zitieren: [CITATION.cff](CITATION.cff). Änderungen: [CH
 
 Claude und Claude Code sind Marken von Anthropic PBC. Dieses Repo ist ein unabhängiges, inoffizielles Community-Projekt und nicht mit Anthropic verbunden. Die Anleitungen beschreiben Technik und Einstellungen nach bestem Wissen; sie sind keine Rechtsberatung. Die Autoren übernehmen keine Gewähr für Vollständigkeit und Aktualität, maßgeblich sind die aktuelle Dokumentation und die Verträge der Anbieter.
 
-Gepflegt von Pexon Consulting. Wer Claude Code im Team einführt, findet bei uns eine [Claude-Code-Schulung zu Agentic Coding](https://pexon-consulting.de/schulungen/claude-code-schulung-agentic-coding).
+Gepflegt von der Pexon Consulting GmbH. Wer Claude Code im Team einführt, findet bei uns eine [Claude-Code-Schulung zu Agentic Coding](https://pexon-consulting.de/schulungen/claude-code-schulung-agentic-coding).
+
+Anbieterkennzeichnung: [Impressum](https://pexon-consulting.de/impressum/) · [Datenschutz](https://pexon-consulting.de/datenschutz/)
