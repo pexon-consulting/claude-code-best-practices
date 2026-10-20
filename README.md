@@ -554,7 +554,7 @@ What makes it different from other Claude Code best practice collections:
 - **A Claude Code plugin** (`team-basis`) and skills for skills.sh.
 - **Rollout templates** for security approval, GDPR documentation (TOM, DPIA), works council and cost policy, plus a managed-settings.json.
 
-Key guides (German): [CLAUDE.md](docs/anleitungen/claude-md.md), [settings.json and permissions](docs/anleitungen/claude-code-permissions.md), [hooks](docs/anleitungen/claude-code-hooks.md), [MCP](docs/anleitungen/claude-code-mcp.md), [GDPR](docs/anleitungen/claude-code-dsgvo.md), [Amazon Bedrock in the EU](docs/anleitungen/claude-code-bedrock.md), [costs](docs/anleitungen/claude-code-kosten.md). The guides explain technology and settings; they are not legal advice.
+Key guides (German): [CLAUDE.md](docs/anleitungen/claude-md.md), [settings.json and permissions](docs/anleitungen/claude-code-permissions.md), [hooks](docs/anleitungen/claude-code-hooks.md), [MCP](docs/anleitungen/claude-code-mcp.md), [GDPR](docs/anleitungen/claude-code-dsgvo.md), [Amazon Bedrock in the EU](docs/anleitungen/claude-code-bedrock.md), [costs](docs/anleitungen/claude-code-kosten.md). This repository is a technical aid, not advice. The guides explain technology and settings; they are not legal advice. We accept no liability for the output of AI systems: code, text and decisions that Claude Code produces come from the model, not from us, and can be wrong. Review them before you commit, merge or run them.
 
 ```bash
 uvx --from git+https://github.com/pexon-consulting/claude-code-best-practices@v0.2.0 claude-team audit .
@@ -579,7 +579,7 @@ python3 -m venv .venv && .venv/bin/pip install -e ".[dev]"
 
 Lizenz: [MIT](LICENSE). Zitieren: [CITATION.cff](CITATION.cff). Änderungen: [CHANGELOG.md](CHANGELOG.md).
 
-Claude und Claude Code sind Marken von Anthropic PBC. Dieses Repo ist ein unabhängiges, inoffizielles Community-Projekt und nicht mit Anthropic verbunden. Die Anleitungen beschreiben Technik und Einstellungen nach bestem Wissen; sie sind keine Rechtsberatung. Die Autoren übernehmen keine Gewähr für Vollständigkeit und Aktualität, maßgeblich sind die aktuelle Dokumentation und die Verträge der Anbieter.
+Claude und Claude Code sind Marken von Anthropic PBC. Dieses Repo ist ein unabhängiges, inoffizielles Community-Projekt und nicht mit Anthropic verbunden. Dieses Repository ist ein technisches Hilfswerk, keine Beratung. Die Anleitungen beschreiben Technik und Einstellungen nach bestem Wissen; sie sind keine Rechtsberatung. Was Claude Code erzeugt, stammt vom Sprachmodell und nicht von uns; für den Output von KI-Systemen übernehmen wir keine Haftung. Prüfe Code und Texte, bevor du sie übernimmst. Die Autoren übernehmen keine Gewähr für Vollständigkeit und Aktualität, maßgeblich sind die aktuelle Dokumentation und die Verträge der Anbieter.
 
 Gepflegt von der Pexon Consulting GmbH. Wer Claude Code im Team einführt, findet bei uns eine [Claude-Code-Schulung zu Agentic Coding](https://pexon-consulting.de/schulungen/claude-code-schulung-agentic-coding).
 
